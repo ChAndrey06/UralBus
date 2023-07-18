@@ -1,0 +1,423 @@
+﻿@using PL.Services.Admin.Models;
+@using System.Globalization
+@model SearchResultViewModel<PL.Entities.News.News, FilterModel>
+
+@{
+    var noImageSrc = "https://via.placeholder.com/300x200?text=%D0%9D%D0%B5%D1%82%20%D0%98%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F";
+    CultureInfo culture = CultureInfo.CreateSpecificCulture("ru-RU");
+}
+
+<section class="content news">
+    <div class="content__container">
+        <div class="breadcrumbs">
+            <a href="" class="breadcrumbs__link">Главная</a>
+            <a href="" class="breadcrumbs__link">Акции</a>
+        </div>
+        <div class="heading">Акции</div>
+        <div class="news__list">
+            @{
+                foreach (var news in Model.Objects.Items)
+                {
+                    <div class="news__list-item">
+                        @{
+                            var imgSrc = news.File is null ? noImageSrc : news.File.Path;
+                            string dateCreatedAt = news.CreatedAt.ToString("dd MMMM yyyy 'года'", culture);
+                        }
+                        <img class="news__img" src="@imgSrc" alt="">
+                        <div class="news__content">
+                            <div class="news__wrapper">
+                                <div class="news__date">@dateCreatedAt</div>
+                                <div class="news__title">@news.Title</div>
+                                <div class="news__text">@news.ShortDescription</div>
+                            </div>
+                            <div class="news__link">
+                                <div class="news__link-text">Читать</div>
+                                <div class="news__link-icon icon-Frame-18"></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+            @*<div class="news__list-item">
+                <img class="news__img" src="./img/picture/Rectangle 11.png" alt="">
+                <div class="news__content">
+                    <div class="news__wrapper">
+                        <div class="news__date">21 марта 2023</div>
+                        <div class="news__title">В Сочи за 1500 рублей!</div>
+                        <div class="news__text">
+                            Куда бы вы хотели отправиться в жаркие выходные? Мы
+                            предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                            поездки Москва — Сочи составит...
+                        </div>
+                    </div>
+                    <div class="news__link">
+                        <div class="news__link-text">Читать</div>
+                        <div class="news__link-icon icon-Frame-18"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="news__list-item">
+                <img class="news__img" src="./img/picture/Rectangle 11 (1).png" alt="">
+                <div class="news__content">
+                    <div class="news__wrapper">
+                        <div class="news__date">21 марта 2023</div>
+                        <div class="news__title">Акция! 1500 рублей билет Москва — Сочи</div>
+                        <div class="news__text">
+                            Куда бы вы хотели отправиться в жаркие выходные? Мы
+                            предлагаем вам отправиться в Сочи! С 15 июля...
+                        </div>
+                    </div>
+                    <div class="news__link">
+                        <div class="news__link-text">Читать</div>
+                        <div class="news__link-icon icon-Frame-18"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="news__list-item">
+                <img class="news__img" src="./img/picture/Rectangle 11 (2).png" alt="">
+                <div class="news__content">
+                    <div class="news__wrapper">
+                        <div class="news__date">21 марта 2023</div>
+                        <div class="news__title">В Сочи за 1500 рублей!</div>
+                        <div class="news__text">
+                            Куда бы вы хотели отправиться в жаркие выходные? Мы
+                            предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                            поездки Москва — Сочи составит...
+                        </div>
+                    </div>
+                    <div class="news__link">
+                        <div class="news__link-text">Читать</div>
+                        <div class="news__link-icon icon-Frame-18"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="news__list-item">
+                <img class="news__img" src="./img/picture/Rectangle 11.png" alt="">
+                <div class="news__content">
+                    <div class="news__wrapper">
+                        <div class="news__date">21 марта 2023</div>
+                        <div class="news__title">В Сочи за 1500 рублей!</div>
+                        <div class="news__text">
+                            Куда бы вы хотели отправиться в жаркие выходные? Мы
+                            предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                            поездки Москва — Сочи составит...
+                        </div>
+                    </div>
+                    <div class="news__link">
+                        <div class="news__link-text">Читать</div>
+                        <div class="news__link-icon icon-Frame-18"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="news__list-item">
+                <img class="news__img" src="./img/picture/Rectangle 11 (1).png" alt="">
+                <div class="news__content">
+                    <div class="news__wrapper">
+                        <div class="news__date">21 марта 2023</div>
+                        <div class="news__title">Акция! 1500 рублей билет Москва — Сочи</div>
+                        <div class="news__text">
+                            Куда бы вы хотели отправиться в жаркие выходные? Мы
+                            предлагаем вам отправиться в Сочи! С 15 июля...
+                        </div>
+                    </div>
+                    <div class="news__link">
+                        <div class="news__link-text">Читать</div>
+                        <div class="news__link-icon icon-Frame-18"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="news__list-item">
+                <img class="news__img" src="./img/picture/Rectangle 11 (2).png" alt="">
+                <div class="news__content">
+                    <div class="news__wrapper">
+                        <div class="news__date">21 марта 2023</div>
+                        <div class="news__title">В Сочи за 1500 рублей!</div>
+                        <div class="news__text">
+                            Куда бы вы хотели отправиться в жаркие выходные? Мы
+                            предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                            поездки Москва — Сочи составит...
+                        </div>
+                    </div>
+                    <div class="news__link">
+                        <div class="news__link-text">Читать</div>
+                        <div class="news__link-icon icon-Frame-18"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="news__list-item">
+                <img class="news__img" src="./img/picture/Rectangle 11.png" alt="">
+                <div class="news__content">
+                    <div class="news__wrapper">
+                        <div class="news__date">21 марта 2023</div>
+                        <div class="news__title">В Сочи за 1500 рублей!</div>
+                        <div class="news__text">
+                            Куда бы вы хотели отправиться в жаркие выходные? Мы
+                            предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                            поездки Москва — Сочи составит...
+                        </div>
+                    </div>
+                    <div class="news__link">
+                        <div class="news__link-text">Читать</div>
+                        <div class="news__link-icon icon-Frame-18"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="news__list-item">
+                <img class="news__img" src="./img/picture/Rectangle 11 (1).png" alt="">
+                <div class="news__content">
+                    <div class="news__wrapper">
+                        <div class="news__date">21 марта 2023</div>
+                        <div class="news__title">Акция! 1500 рублей билет Москва — Сочи</div>
+                        <div class="news__text">
+                            Куда бы вы хотели отправиться в жаркие выходные? Мы
+                            предлагаем вам отправиться в Сочи! С 15 июля...
+                        </div>
+                    </div>
+                    <div class="news__link">
+                        <div class="news__link-text">Читать</div>
+                        <div class="news__link-icon icon-Frame-18"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="news__list-item">
+                <img class="news__img" src="./img/picture/Rectangle 11 (2).png" alt="">
+                <div class="news__content">
+                    <div class="news__wrapper">
+                        <div class="news__date">21 марта 2023</div>
+                        <div class="news__title">В Сочи за 1500 рублей!</div>
+                        <div class="news__text">
+                            Куда бы вы хотели отправиться в жаркие выходные? Мы
+                            предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                            поездки Москва — Сочи составит...
+                        </div>
+                    </div>
+                    <div class="news__link">
+                        <div class="news__link-text">Читать</div>
+                        <div class="news__link-icon icon-Frame-18"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="news__list-item">
+                <img class="news__img" src="./img/picture/Rectangle 11.png" alt="">
+                <div class="news__content">
+                    <div class="news__wrapper">
+                        <div class="news__date">21 марта 2023</div>
+                        <div class="news__title">В Сочи за 1500 рублей!</div>
+                        <div class="news__text">
+                            Куда бы вы хотели отправиться в жаркие выходные? Мы
+                            предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                            поездки Москва — Сочи составит...
+                        </div>
+                    </div>
+                    <div class="news__link">
+                        <div class="news__link-text">Читать</div>
+                        <div class="news__link-icon icon-Frame-18"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="news__list-item">
+                <img class="news__img" src="./img/picture/Rectangle 11 (1).png" alt="">
+                <div class="news__content">
+                    <div class="news__wrapper">
+                        <div class="news__date">21 марта 2023</div>
+                        <div class="news__title">Акция! 1500 рублей билет Москва — Сочи</div>
+                        <div class="news__text">
+                            Куда бы вы хотели отправиться в жаркие выходные? Мы
+                            предлагаем вам отправиться в Сочи! С 15 июля...
+                        </div>
+                    </div>
+                    <div class="news__link">
+                        <div class="news__link-text">Читать</div>
+                        <div class="news__link-icon icon-Frame-18"></div>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+
+        @*<div class="swiper swiper--hidden">
+            <div class="swiper-wrapper">
+                <div class="news__list-item swiper-slide">
+                    <img class="news__img" src="./img/picture/Rectangle 11.png" alt="">
+                    <div class="news__content">
+                        <div class="news__wrapper">
+                            <div class="news__date">21 марта 2023</div>
+                            <div class="news__title">В Сочи за 1500 рублей!</div>
+                            <div class="news__text">
+                                Куда бы вы хотели отправиться в жаркие выходные? Мы
+                                предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                                поездки Москва — Сочи составит...
+                            </div>
+                        </div>
+                        <div class="news__link">
+                            <div class="news__link-text">Читать</div>
+                            <div class="news__link-icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="news__list-item swiper-slide">
+                    <img class="news__img" src="./img/picture/Rectangle 11 (1).png" alt="">
+                    <div class="news__content">
+                        <div class="news__wrapper">
+                            <div class="news__date">21 марта 2023</div>
+                            <div class="news__title">В Сочи за 1500 рублей!</div>
+                            <div class="news__text">
+                                Куда бы вы хотели отправиться в жаркие выходные? Мы
+                                предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                                поездки Москва — Сочи составит...
+                            </div>
+                        </div>
+                        <div class="news__link">
+                            <div class="news__link-text">Читать</div>
+                            <div class="news__link-icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="news__list-item swiper-slide">
+                    <img class="news__img" src="./img/picture/Rectangle 11 (2).png" alt="">
+                    <div class="news__content">
+                        <div class="news__wrapper">
+                            <div class="news__date">21 марта 2023</div>
+                            <div class="news__title">В Сочи за 1500 рублей!</div>
+                            <div class="news__text">
+                                Куда бы вы хотели отправиться в жаркие выходные? Мы
+                                предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                                поездки Москва — Сочи составит...
+                            </div>
+                        </div>
+                        <div class="news__link">
+                            <div class="news__link-text">Читать</div>
+                            <div class="news__link-icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="news__list-item swiper-slide">
+                    <img class="news__img" src="./img/picture/Rectangle 11.png" alt="">
+                    <div class="news__content">
+                        <div class="news__wrapper">
+                            <div class="news__date">21 марта 2023</div>
+                            <div class="news__title">В Сочи за 1500 рублей!</div>
+                            <div class="news__text">
+                                Куда бы вы хотели отправиться в жаркие выходные? Мы
+                                предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                                поездки Москва — Сочи составит...
+                            </div>
+                        </div>
+                        <div class="news__link">
+                            <div class="news__link-text">Читать</div>
+                            <div class="news__link-icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="news__list-item swiper-slide">
+                    <img class="news__img" src="./img/picture/Rectangle 11 (1).png" alt="">
+                    <div class="news__content">
+                        <div class="news__wrapper">
+                            <div class="news__date">21 марта 2023</div>
+                            <div class="news__title">В Сочи за 1500 рублей!</div>
+                            <div class="news__text">
+                                Куда бы вы хотели отправиться в жаркие выходные? Мы
+                                предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                                поездки Москва — Сочи составит...
+                            </div>
+                        </div>
+                        <div class="news__link">
+                            <div class="news__link-text">Читать</div>
+                            <div class="news__link-icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="news__list-item swiper-slide">
+                    <img class="news__img" src="./img/picture/Rectangle 11 (2).png" alt="">
+                    <div class="news__content">
+                        <div class="news__wrapper">
+                            <div class="news__date">21 марта 2023</div>
+                            <div class="news__title">В Сочи за 1500 рублей!</div>
+                            <div class="news__text">
+                                Куда бы вы хотели отправиться в жаркие выходные? Мы
+                                предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                                поездки Москва — Сочи составит...
+                            </div>
+                        </div>
+                        <div class="news__link">
+                            <div class="news__link-text">Читать</div>
+                            <div class="news__link-icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="news__list-item swiper-slide">
+                    <img class="news__img" src="./img/picture/Rectangle 11.png" alt="">
+                    <div class="news__content">
+                        <div class="news__wrapper">
+                            <div class="news__date">21 марта 2023</div>
+                            <div class="news__title">В Сочи за 1500 рублей!</div>
+                            <div class="news__text">
+                                Куда бы вы хотели отправиться в жаркие выходные? Мы
+                                предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                                поездки Москва — Сочи составит...
+                            </div>
+                        </div>
+                        <div class="news__link">
+                            <div class="news__link-text">Читать</div>
+                            <div class="news__link-icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="news__list-item swiper-slide">
+                    <img class="news__img" src="./img/picture/Rectangle 11 (1).png" alt="">
+                    <div class="news__content">
+                        <div class="news__wrapper">
+                            <div class="news__date">21 марта 2023</div>
+                            <div class="news__title">В Сочи за 1500 рублей!</div>
+                            <div class="news__text">
+                                Куда бы вы хотели отправиться в жаркие выходные? Мы
+                                предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                                поездки Москва — Сочи составит...
+                            </div>
+                        </div>
+                        <div class="news__link">
+                            <div class="news__link-text">Читать</div>
+                            <div class="news__link-icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="news__list-item swiper-slide">
+                    <img class="news__img" src="./img/picture/Rectangle 11 (2).png" alt="">
+                    <div class="news__content">
+                        <div class="news__wrapper">
+                            <div class="news__date">21 марта 2023</div>
+                            <div class="news__title">В Сочи за 1500 рублей!</div>
+                            <div class="news__text">
+                                Куда бы вы хотели отправиться в жаркие выходные? Мы
+                                предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                                поездки Москва — Сочи составит...
+                            </div>
+                        </div>
+                        <div class="news__link">
+                            <div class="news__link-text">Читать</div>
+                            <div class="news__link-icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="news__list-item swiper-slide">
+                    <img class="news__img" src="./img/picture/Rectangle 11.png" alt="">
+                    <div class="news__content">
+                        <div class="news__wrapper">
+                            <div class="news__date">21 марта 2023</div>
+                            <div class="news__title">В Сочи за 1500 рублей!</div>
+                            <div class="news__text">
+                                Куда бы вы хотели отправиться в жаркие выходные? Мы
+                                предлагаем вам отправиться в Сочи! С 15 июля стоимость
+                                поездки Москва — Сочи составит...
+                            </div>
+                        </div>
+                        <div class="news__link">
+                            <div class="news__link-text">Читать</div>
+                            <div class="news__link-icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    </div>
+</section>

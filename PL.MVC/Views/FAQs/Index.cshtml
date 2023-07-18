@@ -1,0 +1,519 @@
+﻿@using PL.MVC.Extensions
+@using PL.Services.Client.Models
+@model SearchResultViewModel<PL.Entities.FAQ.FAQ, FAQsFilterModel>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<section class="content faq">
+    <div class="content__container">
+        <div class="breadcrumbs">
+            <a href="@Url.Action("Index", "Home")" class="breadcrumbs__link">Главная</a>
+            <a href="" class="breadcrumbs__link">Часто задаваемые вопросы</a>
+        </div>
+        <div class="heading">часто задаваемые вопросы</div>
+        <div class="faq__tabs">
+            @{
+                foreach (var category in ViewBag.Categories.Items)
+                {
+                    <div 
+                        data-target="target1" 
+                        class="faq__tabs-item @(category.Id == ViewBag.SelectedCategoryId ? "faq__tabs-item--active" : "")" 
+                        onclick="location.href='@Url.Action(Url.GetAction(), new { categoryId = category.Id })'"
+                    >
+                        @category.Title
+                    </div>
+                }
+            }
+
+            @*<div data-target="target1" class="faq__tabs-item">
+                рейсы и автобусы
+            </div>
+            <div data-target="target2" class="faq__tabs-item faq__tabs-item--active">
+                покупка билетов
+            </div>
+            <div data-target="target3" class="faq__tabs-item">
+                возврат билетов
+            </div>
+            <div data-target="target4" class="faq__tabs-item">
+                посадка и перевозка
+            </div>
+            <div data-target="target5" class="faq__tabs-item">
+                положения и документы
+            </div>*@
+        </div>
+        <div class="faq__box ">
+            @*<div data-info="target1" class="faq__content">
+                <div class="faq__accordeon faq__accordeon--active">
+                    <div class="faq__left">
+                        <div class="faq__text">
+                            Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                        </div>
+                        <div class="faq__text-hidden">
+                            Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                        </div>
+                    </div>
+                    <div class="faq__right">
+                        <div class="faq__icon icon-Frame-18"></div>
+                    </div>
+                </div>
+                <div class="faq__accordeon">
+                    <div class="faq__left">
+                        <div class="faq__text">
+                            Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                        </div>
+                        <div class="faq__text-hidden">
+                            Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                        </div>
+                    </div>
+                    <div class="faq__right">
+                        <div class="faq__icon icon-Frame-18"></div>
+                    </div>
+                </div>
+                <div class="faq__accordeon">
+                    <div class="faq__left">
+                        <div class="faq__text">
+                            Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                        </div>
+                        <div class="faq__text-hidden">
+                            Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                        </div>
+                    </div>
+                    <div class="faq__right">
+                        <div class="faq__icon icon-Frame-18"></div>
+                    </div>
+                </div>
+                <div class="faq__accordeon">
+                    <div class="faq__left">
+                        <div class="faq__text">
+                            Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                        </div>
+                        <div class="faq__text-hidden">
+                            Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                        </div>
+                    </div>
+                    <div class="faq__right">
+                        <div class="faq__icon icon-Frame-18"></div>
+                    </div>
+                </div>
+                <div class="faq__accordeon">
+                    <div class="faq__left">
+                        <div class="faq__text">
+                            Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                        </div>
+                        <div class="faq__text-hidden">
+                            Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                        </div>
+                    </div>
+                    <div class="faq__right">
+                        <div class="faq__icon icon-Frame-18"></div>
+                    </div>
+                </div>
+                <div class="faq__accordeon">
+                    <div class="faq__left">
+                        <div class="faq__text">
+                            Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                        </div>
+                        <div class="faq__text-hidden">
+                            Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                        </div>
+                    </div>
+                    <div class="faq__right">
+                        <div class="faq__icon icon-Frame-18"></div>
+                    </div>
+                </div>
+            </div>*@
+
+            <div class="faq__box">
+                <div data-info="target2" class="faq__content faq__content--active faq__content--opacity">
+                    @{
+                        foreach (var faq in Model.Objects.Items)
+                        {
+                            <div class="faq__accordeon">
+                                <div class="faq__left">
+                                    <div class="faq__text">
+                                        @faq.Question
+                                    </div>
+                                    <div class="faq__text-hidden">
+                                        @faq.Answer
+                                    </div>
+                                </div>
+                                <div class="faq__right">
+                                    <div class="faq__icon icon-Frame-18"></div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    
+                    @*<div class="faq__accordeon faq__accordeon--active">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+
+            @*<div class="faq__box">
+                <div data-info="target3" class="faq__content">
+                    <div class="faq__accordeon faq__accordeon--active">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="faq__box">
+                <div data-info="target4" class="faq__content">
+                    <div class="faq__accordeon faq__accordeon--active">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="faq__box">
+                <div data-info="target5" class="faq__content">
+                    <div class="faq__accordeon faq__accordeon--active">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                    <div class="faq__accordeon">
+                        <div class="faq__left">
+                            <div class="faq__text">
+                                Можно ли мне забронировать билет на вашем сайте, а потом выкупить его на автовокзале?
+                            </div>
+                            <div class="faq__text-hidden">
+                                Нет. При оформлении билета на сайте бронь действует только 15 минут. При этом зарезервированный на сайте билет выкупается после подтверждённой оплаты. Если оплаты нет - бронь снимается автоматически.
+                            </div>
+                        </div>
+                        <div class="faq__right">
+                            <div class="faq__icon icon-Frame-18"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</section>

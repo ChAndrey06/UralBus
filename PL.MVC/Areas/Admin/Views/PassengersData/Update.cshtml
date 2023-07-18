@@ -1,0 +1,92 @@
+﻿@using PL.MVC.Extensions
+@model PL.Entities.PassengerData.PassengerData
+
+@{
+    var exists = Model != null;
+    ViewBag.Title = (exists ? "Редактирование" : "Создание") + " данных пассажира";
+}
+
+<form asp-controller="@Url.GetController()" asp-action="Update" asp-antiforgery="true" method="post">
+    <div class="row">
+        <input type="hidden" asp-for="Id" />
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <label asp-for="FirstName">Имя</label>
+                <input type="text" asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <label asp-for="LastName">Фамилия</label>
+                <input type="text" asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <label asp-for="Patronymic">Отчество</label>
+                <input type="text" asp-for="Patronymic" class="form-control" />
+                <span asp-validation-for="Patronymic" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <label asp-for="BirthDate">Дата рождения</label>
+                <input type="date" asp-for="BirthDate" class="form-control" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <label asp-for="Email">Емеил</label>
+                <input type="text" asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <label asp-for="PhoneNumber">Номер телефона</label>
+                <input type="text" asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <label>Клиент</label>
+                <input asp-for="UserId" id="clientId" type="hidden" value="@Model?.User?.Id" />
+                <input id="clientName" type="hidden" value="@(Model.User?.PhoneNumber ?? Model.User?.Email)" />
+                <select id="clientSelect"></select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <button class="btn btn-outline-primary" type="submit">@(exists ? "Сохранить" : "Добавить")</button>
+            <a asp-controller="@Url.GetController()" asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/js/admin/selectizeHelper.js"></script>
+    <script>		
+	$(document).ready(() => {
+	    initSelectize(
+	        'clientSelect',
+	        'clientId',
+	        'id',
+	        ['email', 'firstName', 'phoneNumber'],
+	        item => item.email || item.phoneNumber || item.firstName,
+	        'Начните печатать...',
+	        '/autocomplete/users', {
+	            id: $('#clientId').val(),
+	            firstName: $('#clientName').val()
+	        }, {
+	            limit: 10, 
+	            role: 'client',
+	        }
+	    );
+	});
+	</script>
+}

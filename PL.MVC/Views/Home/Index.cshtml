@@ -1,0 +1,87 @@
+@using PL.MVC.Extensions
+@using PL.Services.Admin
+@using PL.Entities.TripRoute
+@using PL.Entities.Mail
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Mail
+
+@{
+    ViewData["Title"] = "Home Page";
+    var noImageSrc = "https://via.placeholder.com/300x200?text=%D0%9D%D0%B5%D1%82%20%D0%98%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F";
+}
+
+<div class="wrapper">
+    <section class="content content--mbNone main" style="background-image: url(@ViewBag.Config.BackgroundImageUrl)">
+        <div class="content__container content__main">
+            <div class="title">Пассажирские перевозки</div>
+            <div class="content__main-text">@ViewBag.Config.DynamicTitle</div>
+
+            <partial name="~/Views/Trips/_Filter.cshtml" />
+        </div>
+    </section>
+    <section class="content">
+        <div class="content__container">
+            <div class="titleText">Популярные</div>
+            <div class="title">НАПРАВЛЕНИЯ</div>
+            <div class="content__directions">
+                <div class="content__directions-all">
+                    <div class="content__directions-link">Все направления</div>
+                    <div class="content__directions-arrow icon-Frame-18"></div>
+                </div>
+                <div class="content__directions-swiper swiper-container">
+                    <div class="swiper-wrapper">
+                        @foreach (TripRoute pop in ViewBag.PopularDestinations)
+                        {
+                            var imgSrc = pop?.PopularDestinationPicture is null ? noImageSrc : pop.PopularDestinationPicture.Path;
+
+                            <div class="content__directions-card swiper-slide">
+                                <img src="@imgSrc" alt="" class="content__card-img">
+                                <div class="content__card-info">
+                                    <div class="content__card-top">
+                                        <div class="icon-Location content__card-icon "></div>
+                                        <div class="content__card-place">@pop.Title</div>
+                                    </div>
+                                    <div class="content__card-price">
+                                        @pop.PopularDestinatonDescription
+                                        <div onclick="location.href='@pop.PopularDestinationHref'" class="content__card-link">Поехали! <span class="icon-Frame-18"></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content content--mbNone partnership">
+        <div class="content__container partnership__container">
+            <div class="content__partnership-left">
+                <div class="content__partnership-leftText">Хочешь стать партнером?</div>
+                <div class="title content__partnership-title">ЗАПОЛНИ АНКЕТУ</div>
+            </div>
+            <div class="content__partnership-right">
+                <form method="post" asp-action="SendMail">
+                    <div class="content__partnership-top">
+                        <div class="content__partnership-topItem">
+                            <div class="content__partnership-topText">Имя</div>
+                            <input type="text" asp-for=Name class="content__partnership-input" type="text" placeholder="Василий">
+                        </div>
+                        <div class="content__partnership-topItem">
+                            <div class="content__partnership-topText">Фамилия</div>
+                            <input type="text" asp-for=Surname class="content__partnership-input" type="text" placeholder="Шибернудсен">
+                        </div>
+                        <div class="content__partnership-topItem">
+                            <div class="content__partnership-topText">Телефон</div>
+                            <input type="text" asp-for=Phone class="content__partnership-input" id="phone" type="tel">
+                        </div>
+                    </div>
+                    <div class="content__partnership-bottom">
+                        <button class="content__partnership-btn">ВЫСЛАТЬ АНКЕТУ</button>
+                        <div class="content__partnership-info">Оставляя заявку в подтверждаете своё согласие на обработку персональных данных с условиями Политики конфиденциальности</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>

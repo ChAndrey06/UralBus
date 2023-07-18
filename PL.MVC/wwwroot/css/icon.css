@@ -1,0 +1,62 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../fonts/icon/icomoon.eot');
+  src:  url('../fonts/icon/icomoon.eot') format('embedded-opentype'),
+    url('../fonts/icon/icomoon.ttf') format('truetype'),
+    url('../fonts/icon/icomoon.woff') format('woff'),
+    url('../fonts/icon/icomoon.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-Vector-13:before {
+  content: "\e906";
+
+}
+.icon-fluent_calendar-ltr-24-filled:before {
+  content: "\e907";
+
+}
+.icon-fluent_document-one-page-24-filled:before {
+  content: "\e908";
+
+}
+.icon-Frame-18:before {
+  content: "\e902";
+
+}
+.icon-Location:before {
+  content: "\e900";
+
+}
+.icon-Frame-74:before {
+  content: "\e901";
+
+}
+.icon-profile:before {
+  content: "\e903";
+
+}
+.icon-Telegram:before {
+  content: "\e904";
+
+}
+.icon-Phone:before {
+  content: "\e905";
+}

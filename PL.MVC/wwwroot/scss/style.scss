@@ -1,0 +1,3355 @@
+@import "./mixins"; 
+@font-face {
+  font-family: "sf-pro";
+  font-weight: 400;
+  src: url("../fonts/SF-Pro-Display-Regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "sf-pro";
+  font-weight: 500;
+  src: url("../fonts/SF-Pro-Display-Medium.otf") format("opentype");
+}
+@font-face {
+  font-family: "sf-pro";
+  font-weight: 600;
+  src: url("../fonts/SFProDisplay-Semibold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "phenomena";
+  font-weight: 700;
+  src: url("../fonts/Phenomenabold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "sf-pro";
+  font-weight: 700;
+  src: url("../fonts/SF-Pro-Display-Bold.otf") format("opentype");
+}
+@font-face {
+  font-family: "buyan";
+  font-weight: 700;
+  src: url("../fonts/BuyanBold.ttf");
+} 
+
+$orange: #F47A20;
+$grey: #576778;
+$black: #414C59;
+$lightGray: #C5CDD7;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+}
+textarea{
+  resize: none;
+}
+body{
+  position: relative;
+  font-family: 'sf-pro';
+  font-weight: 400;
+}
+input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+textarea:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+html, body{
+  overflow-x: hidden;
+}
+input[type=date]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  color: transparent;
+  background: transparent;
+}
+
+.header{
+  @include fluid(padding-top, 20px, 36px);
+  @include fluid(padding-bottom, 20px, 36px);
+  background-color: #ecf1f5;
+  border-bottom: 1px solid $lightGray;
+  &__container{
+    @include container;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__blockLeft{
+    display: flex;
+    align-items: center;
+  }
+  &__cities{
+    @include fluid(width, 150px, 170px);
+    &:hover{
+      .item{
+        color: #2E3A47;
+      }
+      &.selectize-control.single .selectize-input:after{
+        color: #36D2E2;
+      }
+    }
+  }
+  &__burger{
+    position: fixed;
+    left: -100%;
+    z-index: 3;
+    width: 100%;
+    max-width: 100%;
+    background: #ecf1f5;
+    transition: left .38s ease-in-out;
+    padding-top: 20px;
+    height: 100%;
+    &-number{
+      display: none;
+      color: #414c59;
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 26px;
+    }
+    &-nav{
+      display: none;
+
+    }
+    &--open{
+      left: 0px;
+    }
+    &-container{
+      display: block;
+    }
+    &-icon{
+      margin-right: 20px;
+      color: $lightGray;
+      transition: color 0.3s ease;
+      &:hover{
+        color: $black;
+      }
+    }
+    &-icons{
+      margin-bottom: 15px;
+      &--burger{
+        margin-bottom: 15px;
+        display: block;
+      }
+    }
+
+    &-aunth{
+      color: $grey;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      &:hover{
+        color: $orange;
+      }
+      &--burger{
+        display: block;
+        margin-bottom: 15px;
+      }
+    }
+    &-item{
+      margin-bottom: 15px;
+
+      &:hover{
+        a{
+          color: $orange;
+        }
+      }
+      a{
+        transition: color 0.3s ease;
+        color: $grey;
+      }
+    }
+    &-number{
+      color: $grey;
+      margin-bottom: 15px;
+    }
+  }
+  &__nav{
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: row;
+    &--burger{
+      display: block;
+      li{
+        margin-bottom: 15px;
+      }
+    }
+    &-item{
+      @include fluid(font-size, 20px, 24px);
+      @include fluid(line-height, 26px, 29px);
+      a{
+        color: $grey;
+        transition: color 0.3s ease;
+        &:hover{
+          color: $orange;
+        }
+      }
+      &:not(:last-child){
+        @include fluid(margin-right, 15px, 60px)
+      }
+      &--selected{
+        a{
+          color: $orange;
+        }
+      }
+      &--extra{
+        display: none;
+      }
+    }
+  }
+  &__logo{
+    @include fluid(margin-right, 30px, 40px);
+    &-img{
+      object-fit: contain;
+      @include fluid(height, 60px, 80px);
+    }
+  }
+  &__blockRight{
+    display: flex;
+    align-items: center;
+  }
+  &__phone{
+    display: flex;
+    @include fluid(margin-right, 20px, 30px);
+    &-icon{
+      font-size: 24px;
+      color: $orange;
+      @include fluid(margin-right, 10px, 15px)
+    }
+    &-number{
+      color: $black;
+      font-weight: 700;
+      @include fluid(font-size, 22px, 24px);
+      @include fluid(line-height, 26px, 29px);
+      transition: color 0.3s ease;
+      &:hover{
+        color: $orange;
+      }
+      &--burger{
+        display: block;
+        margin-bottom: 15px;
+      }
+    }
+  }
+  &__icons{
+    position: relative;
+    @include fluid(margin-right, 15px, 21px);
+    &--burger{
+      display: flex;
+      .header__icons-icon{
+        color: #c5cdd7;
+        margin-bottom: 15px;
+        margin-right: 20px;
+        transition: color 0.3s ease;
+        &:hover{
+          color: $grey;
+        }
+        &--authorized{
+          color: $orange;
+        }
+      }
+    }
+    &-item{
+      font-size: 24px;
+      color: $lightGray;
+      transition: color 0.3s ease;
+      &:hover{
+        color: $grey;
+      }
+      &:first-child{
+        @include fluid(margin-right, 25px, 31px);
+      }
+      &--authorized{
+        color: $orange;
+      }
+    }
+  }
+  &__aunth{
+    color: $grey;
+    cursor: pointer;
+    @include fluid(font-size, 16px, 18px);
+    @include fluid(line-height, 18px, 21px);
+    transition: color 0.3s ease;
+    &:hover{
+      color: #111;
+    }
+    &--authorized{
+      color: #F47A20;
+    }
+  }
+  &__userOptions{
+    position: absolute;
+    z-index: 20;
+    top: 40px;
+    background: #FFFFFF;
+    border: 1px solid #D6DAE2;
+    box-shadow: 0px 10px 30px rgba(112, 117, 133, 0.25);
+    border-radius: 20px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    @include fluid(width, 240px, 272px);
+    @include fluid(padding, 20px, 30px);
+    &--hidden{
+      opacity: 0;
+      visibility: hidden;
+    }
+    &-account{
+      color: #C5CDD7;
+      @include fluid(font-size, 18px, 20px);
+      @include fluid(line-height, 22px, 24px);
+      @include fluid(margin-bottom, 20px, 30px);
+    }
+    &-nav{
+      @include fluid(margin-bottom, 30px, 40px);
+      div{
+        cursor: pointer;
+        color: $grey;
+        transition: color 0.3s ease;
+        @include fluid(margin-bottom, 10px, 15px);
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 18px, 21px);
+        &:hover{
+          color: $lightGray
+        }
+      }
+    }
+    &-exit{
+      cursor: pointer;
+      color: $orange;
+      transition: color 0.3s ease;
+      @include fluid(font-size, 16px, 18px);
+      @include fluid(line-height, 18px, 21px);
+      &:hover{
+        color: $black
+      }
+    }
+  }
+  }
+  .title{
+    font-family: 'buyan';
+    color: $grey;
+    width: 63%;
+    @include fluid(font-size, 60px, 160px);
+    @include fluid(line-height, 70px, 134px);
+    @include fluid(margin-bottom, 20px, 40px);
+    &--width100{
+      width: 100%;
+    }
+    &--white{
+      color: #ECF1F5;
+    }
+    &--fontSize{
+      @include fluid(font-size, 40px, 96px);
+      @include fluid(line-height, 55px, 105px);
+    }
+  }
+  .selectize{
+    &-input{
+      height: 50px;
+      color: #576778;
+      @include fluid(font-size, 14px, 16px);
+      @include fluid(line-height, 17px, 19px);
+      padding: 16px 20px;
+      background: #FFFFFF;
+      border: none;
+      border-radius: 20px;
+    }
+    &-dropdown{
+      border: none;
+      padding-left:20px;
+      padding-right: 20px;
+      padding-bottom: 5px;
+      border-radius: 0px 0px 20px 20px;
+      .option{
+        color: #576778;
+        @include fluid(font-size, 14px, 16px);
+        @include fluid(line-height, 17px, 19px);
+      }
+    }
+  }
+  .input-active{
+    border-radius: 20px 20px 0px 0px !important;
+  }
+  .confirm{
+    background-color: #ecf1f5;
+    background-image: url('../img/picture/89.png') !important;
+    background-position: top center;
+    background-size: cover;
+    @include fluid(padding-top, 30px, 60px);
+    &__container{
+      padding-right: 0 !important;
+    }
+    &__btn{
+      @include fluid(margin-top, 30px, 60px);
+      background-color: $orange;
+      display: inline-block;
+        border-radius: 10px;
+        color: #FFFFFF;
+        font-weight: 500;
+        cursor: pointer;
+        text-transform: uppercase;
+
+        @include fluid(padding-top, 23px, 30px);
+        @include fluid(padding-bottom, 23px, 30px);
+        @include fluid(padding-left, 30px, 74px);
+        @include fluid(padding-right, 30px, 74px);
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 18px, 21px);
+        white-space: nowrap;
+        transition: all 0.3s ease;
+        &:hover{
+          background-color: $grey;
+          color: $orange;
+        }
+    }
+    &__item{
+
+      .tripChoice{
+        &__departure, &__arrival{
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+        &__list{
+          &-item{
+            @include fluid(padding-top, 20px, 30px);
+            @include fluid(padding-bottom, 20px, 30px);
+            @include fluid(padding-left, 20px, 40px);
+            @include fluid(padding-right, 20px, 42px);
+          }
+        }
+        &__departure{
+          width: 29%;
+        }
+        &__arrival{
+          width: 27%;
+        }
+        &__options-bottom{
+          margin-top: auto;
+        }
+        &__text{
+          color: #576778;
+          @include fluid(font-size, 14px, 16px);
+          @include fluid(line-height, 17px, 19px);
+          @include fluid(margin-bottom, 8px, 10px);
+        }
+        &__priceValue{
+          @include fluid(margin-bottom, 17px, 25px);
+        }
+        &__passengersValue{
+          @include fluid(font-size, 16px, 14px);
+          @include fluid(margin-bottom, 17px, 25px);
+        }
+        &__confirm{
+          display: flex;
+          flex-direction: column;
+          justify-content: center ;
+          margin-left: auto;
+          div{
+            &:last-child{
+              margin-bottom: 0;
+            }
+          }
+        }
+        
+        &__total{
+          color: #C5CDD7;
+          font-weight: 400;
+          @include fluid(font-size, 14px, 16px);
+          @include fluid(line-height, 17px, 19px);
+          @include fluid(margin-bottom, 8px, 10px);
+          &-value{
+            color: #F47A20;
+            font-weight: 600;
+            @include fluid(font-size, 20px, 24px);
+            @include fluid(line-height, 25px, 29px);
+            span{
+              margin-left: 5px;
+            }
+          }
+        }
+        
+        &__btn{
+          @include fluid(padding-right, 30px, 64px);
+          @include fluid(padding-left, 30px, 64px);
+          &--gray{
+            background-color: #576778;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            padding-left: 4px;
+            padding-right: 4px;
+            @include fluid(padding-top, 15px, 20px);
+            @include fluid(padding-bottom, 15px, 20px);
+            &:hover{
+              div{
+                color: $orange;
+              }
+            }
+            div{
+              transition: color 0.3s ease;
+              text-align: center;
+              margin-top: 5px;
+              text-transform: none;
+              color: #C5CDD7;
+              @include fluid(font-size, 12px, 14px);
+              @include fluid(line-height, 15px, 17px);
+            }
+          }
+        }
+      }
+      
+    }
+  }
+  .details{
+    background-color: #ecf1f5;
+    @include fluid(padding-top, 30px, 60px);
+    background-image: url('../img/picture/89.png') !important;
+    &__content{
+      display: flex;
+      justify-content: space-between;
+      @include fluid(margin-bottom, 30px, 100px);
+    }
+    &__wrapper{
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 11px;
+    }
+    &__progress{
+      display: flex;
+      flex-wrap: wrap;
+      @include fluid(margin-bottom, 30px, 50px);
+      &-item{
+        position: relative;
+        display: flex;
+        align-items: center;
+        &--active{
+          .details__progress-bubble{
+            background-color: $orange;
+          }
+          .details__progress-text{
+            color: $grey;
+          }
+        }
+        &:not(:last-child){
+          @include fluid(padding-right, 30px, 60px);
+          @include fluid(margin-right, 10px, 20px);
+          &::after{
+            position: absolute;
+            content: "";
+            right: 1px;
+            @include fluid(width, 20px, 40px);
+            height: 2px;
+            background: #C5CDD7;
+          }
+        }
+      }
+      &-bubble{
+        @include fluid(width, 25px, 30px);
+        @include fluid(height, 25px, 30px);
+        @include fluid(margin-right, 10px, 15px);
+        background: #C5CDD7;
+        border-radius: 50%;
+        position: relative;
+      }
+      &-number{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #FFFFFF;
+        @include fluid(font-size, 18px, 20px);
+        @include fluid(line-height, 22px, 24px);
+      }
+      &-text{
+        color: #C5CDD7;
+        @include fluid(font-size, 18px, 20px);
+        @include fluid(line-height, 22px, 24px);
+      }
+    }
+    &__text{
+      color: $lightGray;
+      @include fluid(font-size, 18px, 20px);
+      @include fluid(line-height, 24px, 26px);
+      @include fluid(margin-bottom, 20px, 30px);
+    }
+    &__marks{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    &__back{
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+      &-text{
+        color: #F47A20;
+        @include fluid(margin-left, 15px, 20px);
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 19px, 21px);
+      }
+      &-icon{
+        transform: rotate(-180deg);
+        font-size: 12px;
+        color: #F47A20;
+      }
+    }
+    &__departure{
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      @include fluid(margin-bottom, 20px, 30px);
+      &-options{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 17px;
+      }
+      &-time{
+        color: $grey;
+        font-weight: 700;
+        @include fluid(font-size, 28px, 36px);
+        @include fluid(line-height, 34px, 43px);
+      }
+      &-date{
+        color: $grey;
+        @include fluid(font-size, 14px, 16px);
+        @include fluid(line-height, 17px, 19px);
+      }
+      &-place{
+        font-weight: 500;
+        color: $grey;
+        @include fluid(font-size, 22px, 24px);
+        @include fluid(line-height, 26px, 29px);
+      }
+    }
+    &__left{
+      width: 50%;
+    }
+    &__right{
+      @include fluid(width, 450px, 655px);
+      flex-shrink: 0;
+    }
+    &__busStop{
+      display: flex;
+      padding-left: 40px;
+      @include fluid(margin-left, 20px, 40px);
+      @include fluid(padding-bottom, 28px, 40px);
+      position: relative;
+      cursor: pointer;
+      &--active{
+        &::before{
+          width: 20px;
+          background-image: url('../img/picture/Ellipse\ 31.png'), url('../img/picture/Ellipse\ 32.png'), url('../img/picture/Rectangle\ 15.png') !important;
+          background-position:  50% 2px, top center, center !important;
+          background-size: 16px 16px, 20px 20px, 2px 100% !important;
+        }
+        .details__busStop-time{
+          color: $orange;
+        }
+        .details__busStop-place{
+          color: $orange;
+        }
+      }
+      &:last-child{
+        padding-bottom: 0;
+        margin-bottom: 27px;
+        &::before{
+          content: "";
+          width: 20px;
+          position: absolute;
+          left: 0px;
+          background-image: url('../img/picture/Ellipse\ 31.png');
+          background-repeat: no-repeat;
+          height: 100%;
+        }
+      }
+      &::before{
+        content: '';
+        width: 20px;
+        position: absolute;
+        left: 0px;
+        background-image: url('../img/picture/Ellipse\ 31.png'), url('../img/picture/Rectangle\ 15.png');
+        background-repeat: no-repeat;
+        background-position: top center, center;
+        background-size: 16px 16px, 2px 100%;
+        height: 100%;
+      }
+      &-time{
+        color: $grey;
+        font-weight: 600;
+        margin-right: 15px;
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 19px, 21px);
+      }
+      &-place{
+        color: $grey;
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 19px, 21px);
+      }
+    }
+    &__right{
+      &-card{
+        background: #FFFFFF;
+        border: 1px solid #D6DAE2;
+        box-shadow: 0px 10px 30px rgba(112, 117, 133, 0.25);
+        border-radius: 20px;
+        @include fluid(padding, 20px, 30px);
+      }
+    }
+    &__card{
+      &-title{
+        color: $grey;
+        font-weight: 500;
+        @include fluid(font-size, 26px, 32px);
+        @include fluid(line-height, 32px, 38px);
+        @include fluid(margin-bottom, 20px, 40px);
+      }
+      &-info{
+        display: flex;
+        justify-content: space-between;
+        @include fluid(margin-bottom, 15px, 20px);
+      }
+      &-left{
+        width: 20%;
+        color: $lightGray;
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 19px, 21px);
+      }
+      &-right{
+        width: 77%;
+        color: $grey;
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 19px, 21px);
+      }
+      &-text{
+        color: $lightGray;
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 19px, 21px);
+        @include fluid(margin-bottom, 20px, 40px);
+      }
+      &-conditions{
+        @include fluid(margin-bottom, 20px, 70px);
+      }
+      &-button{
+        background-color: $orange;
+        border-radius: 10px;
+        color: #FFFFFF;
+        font-weight: 500;
+        cursor: pointer;
+        text-transform: uppercase;
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 17px, 21px);
+        @include fluid(padding-top, 15px, 22px);
+        @include fluid(padding-bottom, 15px, 22px);
+        @include fluid(padding-left, 30px, 46px);
+        @include fluid(padding-right, 30px, 46px);
+        @include fluid(margin-right, 20px, 40px);
+        white-space: nowrap;
+        transition: all 0.3s ease;
+        &:hover{
+          background-color: $grey;
+          color: $orange;
+        }
+      }
+    }
+    &__conditions{
+      
+      &-item{
+        display: flex;
+        &:first-child{
+          @include fluid(margin-bottom, 10px, 15px);
+        }
+      }
+      &-text{
+        color: $grey;
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 21px, 23px);
+      }
+      &-icon{
+        font-size: 20px;
+        @include fluid(margin-right, 15px, 20px);
+      }
+    }
+    &__map{
+      width: 100%;
+      @include fluid(height, 300px, 545px);
+      border: 1px solid #D6DAE2;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+  }
+  .heading{
+    font-family: "phenomena";
+    font-weight: 700;
+    text-transform: uppercase;
+     color: #576778;
+     @include fluid(font-size, 30px, 56px);
+     @include fluid(line-height, 40px, 61px);
+     @include fluid(margin-bottom, 20px, 62px);
+     &--mbsmall{
+      @include fluid(margin-bottom, 20px, 30px);
+     }
+  }
+  .titleText{
+    color: $grey;
+    @include fluid(font-size, 30px, 32px);
+    @include fluid(line-height, 34px, 38px);
+    @include fluid(margin-bottom, 15px, 20px);
+  }
+  .passengersValue{
+    background-color: #ecf1f5;
+    background-image: url('../img/picture/Group\ 83.png');
+    background-size: contain;
+    @include fluid(padding-bottom, 40px, 90px);
+    @include fluid(padding-top, 40px, 60px);
+    &__card{
+      @include fluid(padding, 25px, 40px);
+      width: 495px;
+      background: #FFFFFF;
+      border: 1px solid #D6DAE2;
+      box-shadow: 0px 10px 30px rgba(112, 117, 133, 0.25);
+      border-radius: 20px;
+      &:last-child{
+        @include fluid(margin-bottom, 250px, 900px);
+      }
+    }
+    &__title{
+      color: #576778;
+      @include fluid(font-size, 24px, 32px);
+      @include fluid(line-height, 30px, 38px);
+      @include fluid(margin-bottom, 20px, 30px);
+    }
+    &__options{
+      display: flex;
+      flex-direction: column;
+      @include fluid(margin-bottom, 50px, 110px);
+      &-item{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        &:first-child{
+          @include fluid(margin-bottom, 20px, 30px);
+        }
+      }
+      &-text{
+        color: #576778;
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 19px, 21px);
+      }
+    }
+    &__quantity{
+      display: flex;
+      align-items: center; 
+
+      &-minus, &-plus{
+        user-select: none;
+        cursor: pointer;
+        position: relative;
+        width: 30px;
+        height: 30px;
+        border: 1px solid #C5CDD7;
+        border-radius: 50%;
+        span{
+          color: #D6DAE2;
+          font-size: 25px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -55%);
+        }
+      }
+      &-value{
+        width: 50px;
+        text-align: center;
+        color:#576778;
+        @include fluid(font-size, 18px, 20px);
+        @include fluid(line-height, 22px, 24px);
+      }
+    }
+    &__warning{
+      color: #F47A20;
+      @include fluid(font-size, 16px, 18px);
+      @include fluid(line-height, 19px, 21px);
+      @include fluid(margin-bottom, 15px, 30px);
+    }
+    &__btn{
+      width: 100%;
+      text-align: center;
+      text-transform: uppercase;
+      background-color: $orange;
+      cursor: pointer;
+      border-radius: 10px;
+      color: #FFFFFF;
+      font-weight: 500;
+      @include fluid(font-size, 16px, 18px);
+      @include fluid(line-height, 17px, 21px);
+      @include fluid(padding-top, 15px, 22px);
+      @include fluid(padding-bottom, 15px, 22px);
+      @include fluid(padding-left, 30px, 46px);
+      @include fluid(padding-right, 30px, 46px);
+      @include fluid(margin-right, 20px, 40px);
+      transition: all 0.3s ease;
+      &:hover{
+        background-color: $grey;
+        color: $orange;
+      }
+    }
+  }
+  .content{
+    background-image: url('../img/picture/Group\ 121.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    @include fluid(padding-bottom, 40px, 90px);
+    &--mbNone{
+      margin-bottom: 0;
+    }
+
+    &__container{
+      @include container;
+    }
+    &__main{
+      @include fluid(padding-top, 120px, 120px);
+      &-text{
+        width: 27%;
+        @include fluid(font-size, 30px, 32px);
+        @include fluid(line-height, 34px, 38px);
+        @include fluid(margin-bottom, 30px, 60px);
+      }
+    }
+    &__directions{
+      &-all{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        cursor: pointer;
+        @include fluid(margin-bottom, 30px, 80px);
+        &:hover{
+          .content__directions-link{
+            color: $orange;
+          }
+          .content__directions-arrow{
+            color: $orange;
+          }
+        }
+      }
+      &-link{
+        color: $grey;
+        @include fluid(font-size, 22px, 24px);
+        @include fluid(line-height, 24px, 29px);
+        @include fluid(margin-right, 15px, 23px);
+        transition: color 0.3s ease;
+      }
+      &-arrow{
+        font-size: 12px;
+        color: $grey;
+        transition: color 0.3s ease;
+      }
+
+      &-card{
+        width: 32%;
+        background: #FFFFFF;
+        box-shadow: 0px 20px 60px rgba(112, 117, 133, 0.25);
+        border-radius: 20px;
+        transition: background-color 0.3s ease;
+        &:hover{
+          background-color: $orange;
+          .content__card-icon{
+            color: #FFFFFF;
+          }
+          .content__card-place{
+            color: #FFFFFF;
+          }
+          .content__card-price{
+            color: #FFFFFF;
+          }
+          .content__card-link{
+            color: #FFFFFF;
+            span{
+              color: #FFFFFF;
+              margin-left: 20px;
+            }
+          }
+        }
+      }
+    }
+    &__card{
+
+      &-img{
+        width: 100%;
+      }
+      &-info{
+        @include fluid(padding, 20px, 30px)
+      }
+      &-top{
+        display: flex;
+        align-items: flex-start;
+      }
+      &-icon{
+        font-size: 24px;
+        color: $orange;
+        transition: color 0.3s ease;
+        @include fluid(margin-bottom, 10px, 15px);
+      }
+      &-place{
+        color: $black;
+        transition: color 0.3s ease;
+        @include fluid(font-size, 22px, 24px);
+        @include fluid(line-height, 24px, 29px);
+        @include fluid(margin-bottom, 8px, 10px);
+      }
+      &-price{
+        color: $lightGray;
+        transition: color 0.3s ease;
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 18px, 21px);
+        @include fluid(margin-bottom, 20px, 30px);
+      }
+      &-link{
+        color: $orange;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 18px, 21px);
+        span{
+          transition: all 0.3s ease;
+          margin-left: 10px;
+          font-size: 12px;
+        }
+      }
+    }
+    &__partnership{
+      &-title{
+          width: 100%;
+          color: #ECF1F5;
+          @include fluid(font-size, 40px, 96px);
+          @include fluid(line-height, 55px, 105px);
+        }
+      &-left{
+        width: 50%;
+        @include fluid(padding-top, 50px, 95px);
+        @include fluid(padding-bottom, 50px, 95px);
+      }
+      &-leftText{
+        color: #ECF1F5;
+        @include fluid(font-size, 30px, 32px);
+        @include fluid(line-height, 34px, 38px);
+        @include fluid(margin-bottom, 10px, 20px);
+      }
+      &-leftTitle{
+        color: #ECF1F5;
+        @include fluid(font-size, 90px, 96px);
+        @include fluid(line-height, 97px, 105px);
+      } 
+      &-right{
+        width: 50%;
+        background-color: #FFFFFF;
+        border-radius: 20px;
+        display: inline-block;
+        @include fluid(margin-top, 30px, 60px);
+        @include fluid(margin-bottom, 30px, 60px);
+        @include fluid(padding, 25px, 40px);
+        padding-bottom: 0;
+      }
+      &-top{
+        display: flex;
+        @include fluid(margin-bottom, 20px, 35px);
+      }
+      &-topItem{
+        @include fluid(width, 170px, 215px)
+      }
+      &-topItem:not(:last-child){
+        @include fluid(margin-right, 15px, 30px);
+      }
+      &-topText{
+        color: $lightGray;
+        @include fluid(font-size, 12px, 14px);
+        @include fluid(line-height, 15px, 17px);
+        margin-bottom: 5px;
+      }
+      &-input{
+        @include fluid(padding-bottom, 8px, 10px);
+        border-bottom: 1px solid #C5CDD7;
+      }
+      &-bottom{
+        display: flex;
+        align-items: center;
+      }
+      &-btn{
+        background-color: $orange;
+        border-radius: 10px;
+        color: #FFFFFF;
+        font-weight: 500;
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 17px, 21px);
+        @include fluid(padding-top, 15px, 22px);
+        @include fluid(padding-bottom, 15px, 22px);
+        @include fluid(padding-left, 30px, 46px);
+        @include fluid(padding-right, 30px, 46px);
+        @include fluid(margin-right, 20px, 40px);
+        white-space: nowrap;
+        transition: all 0.3s ease;
+        &:hover{
+          background-color: $grey;
+          color: $orange;
+        }
+
+      }
+      &-info{
+        max-width: 310px;
+        color: #C5CDD7;
+        @include fluid(font-size, 12px, 14px);
+        @include fluid(line-height, 14px, 17px);
+      }
+    }
+  }
+  .partnership{
+    background-color: $orange;
+    background-image: url('../img/picture/Group\ 122.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding-bottom: 0;
+    &__container{
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .main{
+    background-image:url('../img/picture/ford-transit\ 1.png'),url('../img/picture/Group\ 83.png'), linear-gradient(rgb(236,241,245), rgb(236,241,245));
+    background-repeat: no-repeat;
+    background-position: 100% 100%, top, top;
+    background-size:auto, 100% 100%, 100% 70%;
+    height: 882px;
+  }
+  .wrapper{
+    position: relative;
+
+  }
+  .select1{
+    @include fluid(width, 230px, 270px);
+
+  }
+  .tripOrder{
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    border: 1px solid #D6DAE2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 20px 60px rgba(112, 117, 133, 0.25);
+    @include fluid(padding-top, 20px, 20px);
+    @include fluid(padding-bottom, 20px, 20px);
+    @include fluid(padding-left, 20px, 43px);
+    @include fluid(padding-right, 20px, 20px);
+    display: flex;
+    &__inputs{
+      display: flex;
+    align-items: center;
+    width: 100%;
+    }
+    &__form{
+      display: flex;
+      position: relative;
+
+    }
+    &__formWrap{
+      
+    }
+    &__text{
+      color: $lightGray;
+      margin-bottom: 10px;
+      @include fluid(font-size, 14px, 16px);
+      @include fluid(line-height, 17px, 19px);
+      @include fluid(margin-left, 34px, 40px)
+    }
+    &__from, &__to{
+      @include fluid(margin-right, 15px, 25px)
+    }
+    &__switch{
+
+      @include fluid(margin-right, 6px, 8px);
+      &-icon{
+        cursor: pointer;
+        margin: 0;
+        @include fluid(margin-top, 15px, 0px);
+      }
+    }
+    &__from{
+      width: 23%;
+    }
+    &__to{
+      width: 26%;
+      .tripOrder__icon{
+        color: $orange;
+      }
+    }
+    &__when{
+      margin-right: 10px;
+    }
+    &__icon{
+      @include fluid(margin-right, 10px, 15px);
+      color: $lightGray;
+      font-size: 24px;
+    }
+    &__input{
+      @include fluid(width, 210px, 320px);
+      border-bottom: 1px solid $lightGray;
+      @include fluid(padding-bottom, 10px, 15px);
+      color: #576778;
+        @include fluid(font-size, 16px, 20px);
+        @include fluid(line-height, 20px, 24px);
+      &::placeholder{
+        color: #576778;
+        @include fluid(font-size, 18px, 20px);
+        @include fluid(line-height, 22px, 24px);
+      }
+      &:last-child{}
+    }
+    &__btn{
+      background-color: $orange;
+      border-radius: 10px;
+      color: #FFFFFF;
+      cursor: pointer;
+      white-space: nowrap;
+      text-align: center;
+      margin-left: 5px;
+      margin-left: auto;
+      @include fluid(width, 190px, 272px);
+      @include fluid(padding-top, 20px, 30px);
+      @include fluid(padding-bottom, 20px, 30px);
+
+      @include fluid(font-size, 16px, 18px);
+      @include fluid(line-height, 18px, 21px);
+      transition: all 0.3s ease;
+      &:hover{
+        background-color: $grey;
+        color: $orange;
+      }
+    }
+    &__options{
+      position: absolute;
+      right: 0px;
+      top: 6px;
+      display: flex;
+      div{
+        color: $orange;
+        cursor: pointer;
+        @include fluid(font-size, 14px, 16px);
+        @include fluid(line-height, 16px, 19px);
+        transition: color 0.3s ease;
+        &:hover{
+          color: $grey;
+        }
+        &:first-child{
+          @include fluid(margin-right, 5px, 15px);
+        }
+        
+      }
+    }
+    .selectize-input{
+      padding: 5px;
+      padding-left: 5px !important;
+      padding-bottom: 5px !important;
+      height: auto;
+      overflow: auto;
+      padding: 0;
+      border: none;
+      border-radius: 0px;
+      box-shadow: none;
+      color: #576778;
+      @include fluid(font-size, 16px, 20px);
+      @include fluid(line-height, 20px, 24px);
+      &::after{
+        display: none !important;
+      }
+      input{
+        @include fluid(font-size, 16px, 20px);
+        @include fluid(line-height, 20px, 24px);
+      }
+    }
+    .input-active{
+      border-radius: 0px !important;
+    }
+    .selectize-dropdown-content{
+      div{
+        padding: 5px;
+      }
+    }
+    .selectize-dropdown{
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  .burger{
+    display: none;
+    position: relative;
+    width: 25px;
+    height: 25px;
+    z-index: 12;
+    cursor: pointer;
+    transition: .38s ease-in-out;
+  }
+  .selectize{
+    &-control{
+
+    }
+  }
+  .tripChoice{
+    background-image: url('../img/picture/89.png');
+    background-color: #ecf1f5;
+    background-position: top center;
+    background-size: cover;
+    @include fluid(padding-top, 30px, 60px);
+    .tripOrder{
+      margin-bottom: 20px;
+      box-shadow: none;
+    }
+    &__filter{
+      overflow-x: scroll;
+      display: flex;
+      align-items: center;
+      -ms-overflow-style: none;  
+      scrollbar-width: none;  
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+    .selected{
+      background-color: #fff;
+    }
+    .active{
+      background-color: #fff;
+    }
+    .selectize-control{
+      position: inherit;
+    }
+    &__sort{
+      width: 50%;
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      @include fluid(margin-bottom, 15px, 50px);
+      &-text{
+        color: #576778;
+        @include fluid(font-size, 16px, 19px);
+        @include fluid(line-height, 19px, 21px);
+        @include fluid(margin-right, 10px, 38px)
+      }
+    }
+    &__wrapper{
+      width: 100%;
+      display: flex;
+    
+    }
+    &__departure{
+      width: 29%;
+    }
+    &__arrival{
+      width: 27%;
+    }
+    &__list{
+      &-item{
+        display: flex;
+        position: relative;
+        justify-content: space-between;
+        background-color: #FFFFFF;
+        border: 1px solid #D6DAE2;
+        box-shadow: 0px 10px 30px rgba(112, 117, 133, 0.25);
+        border-radius: 20px;
+        @include fluid(margin-bottom, 15px, 20px);
+        @include fluid(padding-top, 20px, 26px);
+        @include fluid(padding-bottom, 20px, 26px);
+        @include fluid(padding-left, 20px, 40px);
+        @include fluid(padding-right, 20px, 30px);
+        &:last-child{
+          @include fluid(margin-bottom, 200px, 400px);
+        }
+        &--moscow{
+          &::before{
+            content: "Через москву";
+            position: absolute;
+            top: 0px;
+            @include fluid(left, 120px, 210px);
+            background: #FFA15B;
+            border-radius: 0px 0px 10px 10px;
+            padding: 7px;
+            padding-bottom: 5px;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            @include fluid(font-size, 12px, 14px);
+            @include fluid(line-height, 15px, 17px);
+          }
+        }
+        &--firmal{
+          &::before{
+            content: "фирменный рейс";
+            position: absolute;
+            top: 0px;
+            @include fluid(left, 120px, 210px);
+            background: #AF55E6;
+            border-radius: 0px 0px 10px 10px;
+            padding: 7px;
+            padding-bottom: 5px;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            @include fluid(font-size, 12px, 14px);
+            @include fluid(line-height, 15px, 17px);
+          }
+        }
+        &--fast{
+          &::before{
+            content: "самый быстрый";
+            position: absolute;
+            top: 0px;
+            @include fluid(left, 120px, 210px);
+            background: #555AE6;
+            border-radius: 0px 0px 10px 10px;
+            padding: 7px;
+            padding-bottom: 5px;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            @include fluid(font-size, 12px, 14px);
+            @include fluid(line-height, 15px, 17px);
+          }
+        }
+      }
+    }
+    &__date{
+      color: #576778;
+      @include fluid(font-size, 18px, 20px);
+      @include fluid(line-height, 22px, 24px);
+      @include fluid(margin-bottom, 18px, 25px);
+    }
+    &__time{
+      color: #576778;
+      font-weight: 700;
+      @include fluid(font-size, 24px, 36px);
+      @include fluid(line-height, 30px, 43px);
+      @include fluid(margin-bottom, 8px, 10px);
+    }
+    &__place{
+      color: #C5CDD7;
+      @include fluid(font-size, 14px, 16px);
+      @include fluid(line-height, 17px, 19px);
+      padding-right: 5px;
+    }
+    &__price{
+      color: #C5CDD7;
+      @include fluid(font-size, 14px, 16px);
+      @include fluid(line-height, 17px, 19px);
+      @include fluid(margin-bottom, 8px, 10px);
+    }
+    &__priceValue{
+      color: #576778;
+      font-weight: 600;
+      @include fluid(font-size, 18px, 24px);
+      @include fluid(line-height, 24px, 29px);
+      @include fluid(margin-bottom, 12px, 15px);
+    }
+    &__travelTime{
+      color: #C5CDD7;
+      @include fluid(font-size, 14px, 16px);
+      @include fluid(line-height, 17px, 19px);
+      @include fluid(margin-bottom, 8px, 10px);
+    }
+    &__timeValue{
+      color: #576778;
+      @include fluid(font-size, 14px, 16px);
+      @include fluid(line-height, 16px, 19px);
+    }
+    &__passengers{ 
+      color: #C5CDD7;
+      @include fluid(font-size, 14px, 16px);
+      @include fluid(line-height, 17px, 19px);
+      @include fluid(margin-bottom, 8px, 10px);
+    }
+    &__passengersValue{
+      color: #576778;
+      @include fluid(font-size, 14px, 16px);
+      @include fluid(line-height, 16px, 19px);
+    }
+    &__btn{
+      background-color: #F47A20;
+      color: #FFFFFF;
+      text-transform: uppercase;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      @include fluid(margin-bottom, 6px, 15px);
+      @include fluid(font-size, 16px, 18px);
+      @include fluid(line-height, 18px, 21px);
+      @include fluid(padding-top, 20px, 31px);
+      @include fluid(padding-bottom, 20px, 28px);
+      @include fluid(padding-left, 68px, 102px);
+      @include fluid(padding-right, 68px, 102px);
+      &--myTrip{
+        @include fluid(padding-left, 36px, 53px);
+        @include fluid(padding-right, 36px, 53px);
+      }
+      &:hover{
+        background-color: $grey;
+        color: $orange;
+      }
+    }
+    &__enabled{
+      color: #C5CDD7;
+      text-align: end;
+      @include fluid(font-size, 14px, 16px);
+      @include fluid(line-height, 17px, 19px);
+      &--myTrip{
+        color: #576778;
+      }
+    }
+    &__confirm{
+      align-self: flex-end;
+      margin-left: auto;
+      &--hidden{
+        display: none;
+      }
+    }
+
+  }
+  .swiper{
+    &--hidden{
+      display: none;
+    }
+  }
+  .selected{
+    background-color: #ECF1F5;
+    span{
+      color: #576778;
+    }
+  }
+  .active{
+    color: #C5CDD7 !important;
+  }
+  .delete{
+    border-radius: 20px;
+    background: #FFFFFF;
+    @include fluid(padding, 20px, 50px);
+    @include fluid(padding-top, 30px, 60px);
+    z-index: 21;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+    &--hidden{
+      opacity: 0;
+      visibility: hidden;
+    }
+    &__content{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    &__logo{
+      object-fit: cover;
+      @include fluid(height, 120px, 144px);
+      @include fluid(margin-bottom, 25px, 52px);
+    }
+    &__text{
+      color: #576778;
+      font-weight: 600;
+      text-align: center;
+      @include fluid(width, 280px, 460px);
+      @include fluid(font-size, 18px, 20px);
+      @include fluid(line-height, 22px, 24px);
+      @include fluid(margin-bottom, 20px, 60px);
+    }
+    &__buttons{
+      display: flex;
+      @include fluid(gap, 15px, 20px);
+      &-item{
+        background-color: #F47A20;
+        color: #FFFFFF;
+        text-transform: uppercase;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        @include fluid(width, 120px, 150px);
+        @include fluid(margin-bottom, 12px, 15px);
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 18px, 21px);
+        @include fluid(padding-top, 25px, 31px);
+        @include fluid(padding-bottom, 22px, 28px);
+        &:hover{
+          background-color: $grey;
+          color: $orange;
+        }
+        &--gray{
+          background-color: #576778;
+        }
+      }
+    }
+  }
+  .welcome{
+    border-radius: 20px;
+    background: #FFFFFF;
+    @include fluid(padding, 20px, 50px);
+    z-index: 21;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+    &--hidden{
+      opacity: 0;
+      visibility: hidden;
+    }
+    &__title{
+      color: #576778;
+      font-weight: 600;
+      @include fluid(font-size, 24px, 32px);
+      @include fluid(line-height, 32px, 38px);
+      @include fluid(margin-bottom, 15px, 20px);
+    }
+    &__content{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    &__logo{
+      object-fit: cover;
+      @include fluid(height, 70px, 102px);
+      @include fluid(margin-bottom, 28px, 68px);
+    }
+    &__text{
+      color: #576778;
+      font-weight: 600;
+      text-align: center;
+      @include fluid(width, 320px, 460px);
+      @include fluid(font-size, 16px, 20px);
+      @include fluid(line-height, 22px, 24px);
+      @include fluid(margin-bottom, 20px, 60px);
+    }
+  }
+  .modal{
+    
+    &__overlay{
+      position: absolute;
+      top: 0px;
+      z-index: 20;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(59, 59, 59, 0.5);
+      transition: background-color 0.3s ease ;
+      transition: visibility, 0.6s ease;
+      &--hidden{
+        visibility: hidden;
+        background-color: rgba(59, 59, 59, 0);
+      }
+    }
+    &__item{
+      color: #C5CDD7;
+      @include fluid(font-size, 18px, 20px);
+      @include fluid(line-height, 24px, 26px);
+      &--active{
+        background-color: #ECF1F5;
+      }
+    }
+    &__box{
+      @include fluid(width, 420px, 560px);
+      @include fluid(height, 450px, 650px);
+      background: #FFFFFF;
+      border-radius: 20px;
+      @include fluid(padding, 20px, 50px);
+      z-index: 21;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+      transition: visibility 0.6s ease;
+      &--hidden{
+        opacity: 0;
+        visibility: hidden;
+      }
+      form{
+        height: 100%;
+      }
+    }
+    &__code{
+      @include fluid(width, 380px, 560px);
+      @include fluid(height, 360px, 650px);
+      background: #FFFFFF;
+      border-radius: 20px;
+      @include fluid(padding, 20px, 50px);
+      z-index: 21;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+      transition: visibility 0.6s ease;
+      &--hidden{
+        opacity: 0;
+        visibility: hidden;
+      }
+      &-value{
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+        gap: 5px;
+        padding-right: 0px !important;
+      }
+      &-item{
+        width: 18px;
+        border-bottom: 2px solid #D6DAE2;
+        text-align: center;
+        @include fluid(margin-top, 10px, 22px);
+        @include fluid(margin-bottom, 10px, 22px);
+        font-size: 22px;
+        line-height: 26px;
+        &:not(:last-child){
+          margin-right: 10px;
+        }
+        &:focus{
+          border-bottom: 2px solid #576778;
+        }
+      }
+      &-btn{
+        background-color: #F47A20;
+      color: #FFFFFF;
+      text-transform: uppercase;
+      border-radius: 10px;
+      text-align: center;
+      display: block;
+      margin: 0 auto;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      @include fluid(font-size, 16px, 18px);
+      @include fluid(line-height, 18px, 21px);
+      @include fluid(padding-top, 20px, 31px);
+      @include fluid(padding-bottom, 20px, 28px);
+      @include fluid(padding-left, 30px, 102px);
+      @include fluid(padding-right, 30px, 102px);
+      &--myTrip{
+        @include fluid(padding-left, 36px, 53px);
+        @include fluid(padding-right, 36px, 53px);
+      }
+      &--hidden{
+        display: none;
+      }
+      &:hover{
+        background-color: $grey;
+        color: $orange;
+      }
+      }
+    }
+    &__registration{
+      @include fluid(width, 420px, 560px);
+      @include fluid(height, 450px, 650px);
+      background: #FFFFFF;
+      border-radius: 20px;
+      @include fluid(padding, 20px, 50px);
+      z-index: 21;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+      transition: visibility 0.6s ease;
+      &--hidden{
+        opacity: 0;
+        visibility: hidden;
+      }
+      form{
+        height: 100%;
+      }
+    }
+    &__form{
+      overflow: hidden;
+      display: flex;
+      @include fluid(width, 280px, 460px);
+      @include fluid(padding-left, 0px, 0px);
+      @include fluid(padding-right, 15px, 25px);
+      padding-top: 3px;
+      padding-bottom: 3px;
+      border: 1px solid #D6DAE2;
+      border-radius: 20px;
+      @include fluid(margin-bottom, 15px, 20px);
+      .selectize{
+        &-control{
+          position: initial;
+        }
+      }
+      &-wrapper{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    &__content{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+    }
+    &__logo{
+      object-fit: cover;
+      @include fluid(height, 75px, 102px);
+      @include fluid(margin-bottom, 20px, 60px);
+    }
+    &__text{
+      font-weight: 600;
+      color: #576778;
+      text-align: center;
+      width: 55%;
+      @include fluid(font-size, 16px, 20px);
+      @include fluid(line-height, 22px, 24px);
+      @include fluid(margin-bottom, 20px, 30px);
+    }
+    &__input{
+      
+      color: #C5CDD7;
+      @include fluid(font-size, 16px, 20px);
+      @include fluid(line-height, 22px, 26px);
+    }
+    &__check{
+      @include fluid(margin-bottom, 40px, 100px);
+      align-self: flex-start;
+
+    }
+    &__btn{
+      background-color: #F47A20;
+      color: #FFFFFF;
+      text-transform: uppercase;
+      border-radius: 10px;
+      text-align: center;
+      display: inline-block;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      @include fluid(font-size, 16px, 18px);
+      @include fluid(line-height, 18px, 21px);
+      @include fluid(padding-top, 20px, 31px);
+      @include fluid(padding-bottom, 20px, 28px);
+      @include fluid(padding-left, 30px, 102px);
+      @include fluid(padding-right, 30px, 102px);
+      &--myTrip{
+        @include fluid(padding-left, 36px, 53px);
+        @include fluid(padding-right, 36px, 53px);
+      }
+      &--hidden{
+        display: none;
+      }
+      &:hover{
+        background-color: $grey;
+        color: $orange;
+      }
+      &-wrapper{
+        margin-top: auto;
+        display: block;
+
+      }
+    }
+    &__check{
+      label{
+        div{
+          color: #C5CDD7;
+        @include fluid(font-size, 12px, 14px);
+        @include fluid(line-height, 16px, 18px);
+        }
+        &::before{
+          border: 1px solid #D6DAE2;
+          border-radius: 10px;
+        }
+      }
+    }
+    &__select{
+
+      .selectize{
+        &-dropdown{
+          @include fluid(padding-top,30px, 50px);
+          border-radius: 20px;
+          box-shadow: none;
+          padding-left: 0;
+          padding-right: 0;
+          @include fluid(height, 320px, 450px);
+          top: 0px !important;
+          left: 0px !important;
+          width: 100% !important;
+          &-content{
+            height: 100% !important;
+            max-height: none !important;
+            div{
+              display: flex;
+              justify-content: space-between;
+              @include fluid(padding-top, 10px, 17px);
+              @include fluid(padding-bottom, 10px, 17px);
+              @include fluid(padding-left, 30px, 50px);
+              @include fluid(padding-right, 30px, 50px);
+            }
+          }
+          &--active{
+            display: block !important;
+          }
+        }
+        &-input{
+          border-radius: 0;
+          box-shadow: none;
+          padding-top: 15px !important;
+          @include fluid(width, 85px, 90px);
+          .item{
+            color: #C5CDD7;
+            @include fluid(font-size, 16px, 20px);
+            @include fluid(line-height, 24px, 26px);
+          }
+          &::after{
+            right: 10px !important;
+            top: 56% !important;
+            border-color: #C5CDD7 transparent transparent transparent !important;
+          }
+          input{
+            width: 100% !important;
+            padding-top: 6px !important;
+            &::placeholder{
+
+              color: #C5CDD7;
+              @include fluid(font-size, 18px, 20px) ;
+              @include fluid(line-height, 24px, 26px) ;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .news{
+    background-image: url('../img/picture/Group\ 83ed.png');
+    background-size: cover;
+    background-position: center top;
+    @include fluid(padding-top, 30px, 60px);
+    background-color: #ecf1f5;
+    &__list{
+      display: flex;
+      flex-wrap: wrap;
+      &--hidden{
+        display: none;
+      }
+      &-item{
+        background-color: #FFFFFF;
+        width: 32%;
+        border-radius: 20px;
+        box-shadow: 0px 15px 30px #DBE3EA;
+        @include fluid(margin-bottom, 30px, 40px);
+        &:not(:nth-child(3n)){
+          @include fluid(margin-right, 15px, 20px)
+        }
+      }
+    }
+    &__img{
+      width: 100%;
+      @include fluid(height, 170px, 300px);
+      object-fit: cover;
+      border-radius: 20px 20px 0 0;
+    }
+    &__content{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      @include fluid(height, 220px, 260px);
+      @include fluid(padding-top, 15px, 30px);
+      @include fluid(padding-bottom, 15px, 30px);
+      @include fluid(padding-left, 15px, 30px);
+      @include fluid(padding-right, 15px, 75px)
+    }
+    &__date{
+      color: $lightGray;
+      @include fluid(font-size, 16px, 18px);
+      @include fluid(line-height, 19px, 21px);
+      @include fluid(margin-bottom, 8px, 10px)
+    }
+    &__title{
+      color: $grey;
+      @include fluid(font-size, 18px, 24px);
+      @include fluid(line-height, 22px, 29px);
+      @include fluid(margin-bottom, 13px, 25px);
+    }
+    &__text{
+      color: $grey;
+      @include fluid(font-size, 14px, 16px);
+      @include fluid(line-height, 16px, 19px);
+    }
+    &__link{
+      display: flex;
+      align-items:baseline;
+      cursor: pointer;
+      &-text{
+        color: #F47A20;
+        transition: margin-right 0.3s ease;
+        @include fluid(font-size, 16px, 18px);
+        @include fluid(line-height, 18px, 21px);
+        @include fluid(margin-right, 15px, 20px);
+      }
+      &-icon{
+        font-size: 12px;
+        color: $orange;
+      }
+      &:hover{
+        .news__link-text{
+          margin-right: 35px;
+        }
+      }
+    }
+  }
+  .footer{
+    background-color: #414C59;
+    background-image: url('../img/picture/Group\ 123\ \(1\).png');
+    background-size: cover;
+    background-position: center center;
+    &__container{
+      @include container;
+      @include fluid(padding-top, 20px, 40px);
+      @include fluid(padding-bottom, 20px, 40px);
+      display: flex;
+      justify-content: space-between;
+  }
+  &__left{
+    display: flex;
+    flex-direction: row;
+  }
+  &__logoItem{
+    &-img{
+      @include fluid(margin-bottom, 30px, 53px);
+      object-fit: contain;
+      @include fluid(height, 60px, 80px);
+    }
+    &-text{
+      color: #C6D9E4;
+      span{
+        color: #576778;
+      }
+    }
+  }
+  &__text{
+    display: none;
+  }
+  &__links{
+    display: flex;
+
+    &-item{
+      @include fluid(margin-right, 20px, 40px);
+      
+      a{
+        color: #C5CDD7;
+        @include fluid(font-size, 14px, 16px);
+        @include fluid(line-height, 16px, 19px);
+        transition: color 0.3s ease;
+        &:hover{
+          color: $orange;
+        }
+      }
+    }
+  }
+  &__phone{
+    display: flex;
+    &-icon{
+      font-size: 24px;
+      color: $orange;
+      @include fluid(margin-right, 20px, 24px)
+    }
+    &-number{
+      color: white;
+      font-weight: 700;
+      @include fluid(font-size, 16px, 24px);
+      @include fluid(line-height, 24px, 29px);
+      transition: color 0.3s ease;
+      &:hover{
+        color: $orange;
+      }
+    }
+  }
+  &__right{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  &__link{
+    display: flex;
+    align-items: center;
+    &-text{
+      color: #C5CDD7;
+      @include fluid(font-size, 12px, 14px);
+      @include fluid(line-height, 14px, 17px);
+      @include fluid(margin-right, 15px, 20px)
+    }
+  }
+}
+.faq{
+  background-color: #ecf1f5;
+  background-image: url('../img/picture/Group\ 183.png');
+      background-size: cover;
+    background-position: top center;
+  @include fluid(padding-top, 40px, 60px);
+  &__tabs{
+    display: flex;
+    @include fluid(margin-bottom, 30px, 60px);
+    overflow-x: scroll;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar{
+      width: 0;
+      height: 0;
+    }
+    &-item{
+      flex-shrink: 0;
+      background-color: #F47A20;
+      text-align: center;
+      color: #FFFFFF;
+      opacity: 0.5;
+      font-weight: 500;
+      text-transform: uppercase;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      @include fluid(font-size, 14px, 18px);
+      @include fluid(line-height, 18px, 21px);
+      @include fluid(margin-right, 15px, 20px);
+      @include fluid(padding-top, 15px, 25px);
+      @include fluid(padding-bottom, 15px, 25px);
+      @include fluid(padding-left, 20px, 30px);
+      @include fluid(padding-right, 20px, 30px);
+      &--active{
+        background: #F47A20;
+        opacity: 1;
+      }
+    }
+  }
+  &__content{
+    opacity: 0;
+    display: none;
+    &--active{
+      display: block;
+    } 
+    &--opacity{
+      opacity: 1;
+      transition: all 0.38s;
+    }
+  }
+  &__accordeon{
+    cursor: pointer;
+    background-color: #FFFFFF;
+    border: 1px solid #D6DAE2;
+    box-shadow: 0px 10px 30px rgba(112, 117, 133, 0.25);
+    border-radius: 20px;
+    display: flex;
+    margin-bottom: 20px;
+    @include fluid(padding, 20px, 30px);
+    &--active{
+      .faq__icon{
+        color: #F47A20;
+        transform: rotate(270deg);
+      }
+    }
+  }
+  &__left{  
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+  }
+  &__right{
+    width: 10%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  &__text{
+    color: #576778;
+    @include fluid(font-size, 14px, 16px);
+    @include fluid(line-height, 17px, 19px);
+    @include fluid(width, 300px, 365px);
+    &-hidden{
+      color: #C5CDD7;
+      @include fluid(font-size, 14px, 16px);
+      @include fluid(line-height, 17px, 19px);
+      @include fluid(width, 325px, 676px);
+    }
+  }
+  &__icon{
+    margin-left: auto;
+    transform: rotate(90deg);
+    transition: all 0.3s ease;
+
+  }
+}
+.myData{
+  background-image: url('../img/picture/Group\ 183.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #ecf1f5;
+  @include fluid(padding-top, 40px, 60px);
+  &__text{
+    width: 40%;
+    color: $lightGray;
+    @include fluid(font-size, 18px, 20px);
+    @include fluid(line-height, 22px, 26px);
+    @include fluid(margin-bottom, 20px, 30px);
+  }
+  &__inputs{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    @include fluid(margin-bottom, 30px, 70px);
+    &-item{
+      width: 48%;
+      background: #FFFFFF;
+      border: 1px solid #D6DAE2;
+      border-radius: 20px;
+      color: #576778;
+      @include fluid(font-size, 18px, 20px);
+      @include fluid(line-height, 22px, 26px);
+      @include fluid(padding-top, 18px, 24px);
+      @include fluid(padding-bottom, 18px, 24px);
+      @include fluid(padding-left, 22px, 30px);
+      @include fluid(padding-right, 22px, 30px);
+      &:not(:last-child){
+        @include fluid(margin-bottom, 15px, 20px);
+      }
+      &::placeholder{
+        color: $lightGray;
+        @include fluid(font-size, 16px, 20px);
+        @include fluid(line-height, 22px, 26px);
+      }
+    }
+    &-checkbox{
+      @include fluid(margin-bottom, 30px, 50px);
+      label{
+        color: $grey;
+        @include fluid(font-size, 16px, 20px);
+        @include fluid(line-height, 22px, 26px);
+      }
+      a{
+        color: $black;
+      }
+    }
+    &-bottom{
+      margin-bottom: 20px;
+      .myData__inputs-item{
+        margin-bottom: 0 ;
+      }
+    }
+    &-radio{
+      width: 100%;
+      display: flex;
+      align-items: center;
+      @include fluid(margin-bottom, 18px, 24px);
+    }
+  }
+  &__radio{
+
+    &-text{
+      color: $grey;
+      margin-left: 30px;
+      @include fluid(font-size, 18px, 20px);
+      @include fluid(line-height, 22px, 26px);
+      @include fluid(margin-right, 30px, 50px);
+    }
+    &-label{
+      color: $grey;
+      @include fluid(font-size, 18px, 20px);
+      @include fluid(line-height, 22px, 26px);
+      
+    }
+  }
+  &__select{
+    width: 48%;
+    .selectize-input{
+      height: 100%;
+      color: $grey;
+      outline: 1px solid #D6DAE2;
+      border-radius: 20px;
+      @include fluid(font-size, 18px, 20px);
+      @include fluid(line-height, 22px, 26px);
+      @include fluid(padding-top, 18px, 24px);
+      @include fluid(padding-bottom, 18px, 24px);
+      @include fluid(padding-left, 22px, 30px);
+      @include fluid(padding-right, 22px, 30px);
+    }
+    .selectize-dropdown{
+      outline: 1px solid #D6DAE2;
+    }
+  }
+  &__title{
+    color: $grey;
+    font-weight: 500;
+    @include fluid(font-size, 24px, 32px);
+    @include fluid(line-height, 30px, 38px);
+    @include fluid(margin-bottom, 20px, 30px);
+  }
+  &__buttons{
+    display: flex;
+    @include fluid(margin-bottom, 200px, 400px);
+    &-item{
+      display: block;
+      text-align: center;
+      background-color: $orange;
+      border-radius: 10px;
+      color: #FFFFFF;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      @include fluid(margin-right, 20px, 30px);
+      @include fluid(width, 240px, 278px);
+      @include fluid(padding-top, 20px, 30px);
+      @include fluid(padding-bottom, 20px, 30px);
+      @include fluid(font-size, 16px, 18px);
+      @include fluid(line-height, 18px, 21px);
+      &--gray{
+        background-color: #C5CDD7;
+      }
+      &:hover{
+        background-color: $grey;
+        color: $orange;
+      }
+    }
+  }
+}
+.myData__radio-item{
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.myData__radio-item+label {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
+}
+
+.myData__radio-item+label::after {
+  content: '';
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  margin-right: 30px;
+  border-radius: 10px;
+  background-repeat: no-repeat;
+  background: #FFFFFF;
+}
+
+.myData__radio-item:checked+label::after {
+  background-color: #F47A20;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("../img/picture/Group\ 193.svg");
+}
+.myData__checkbox{
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+.myData__checkbox+label {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
+}
+.myData__checkbox+label::before {
+  content: '';
+  display: inline-block;
+  @include fluid(width, 25px, 30px);
+  @include fluid(height, 25px, 30px);
+  flex-shrink: 0;
+  background: #FFFFFF;
+  border-radius: 10px;
+  margin-right: 20px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 50% 50%;
+}
+.myData__checkbox:checked+label::before {
+  background-color: #F47A20;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("../img/picture/Group\ 193.svg");
+}
+
+.breadcrumbs{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  @include fluid(margin-bottom, 20px, 60px);
+  &__link{
+    color: $lightGray;
+    @include fluid(font-size, 18px, 20px);
+    @include fluid(line-height, 22px, 24px);
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: color .38s ease-in-out;
+    &::before{
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: #F47A20;
+      border-radius: 50%;
+      margin-left: 15px;
+      margin-right: 15px;
+    }
+    &:first-child{
+      &::before{
+        content: none;
+      }
+    }
+    &:hover{
+      color: $orange;
+    }
+    &:last-child{
+      pointer-events: none;
+      color: $grey;
+    }
+  }
+}
+.passengers{
+  background-image: url('../img/picture/89.png') !important;
+  background-color: #ecf1f5;
+  @include fluid(padding-top, 40px, 60px);
+  &__container{
+    @include fluid(margin-bottom, 300px, 850px);
+  }
+  &__text{
+    width: 35%;
+    color: #99A2AB;
+    @include fluid(margin-bottom, 20px, 30px);
+    @include fluid(font-size, 18px, 20px);
+    @include fluid(line-height, 22px, 26px);
+
+  }
+  &__cards{
+    display: flex;
+    @include fluid(gap, 15px, 20px);
+    flex-wrap: wrap;
+    @include fluid(margin-bottom, 40px, 60px);
+    &-item{
+      width: 32%;
+      background: #FFFFFF;
+      border: 1px solid #D6DAE2;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      @include fluid(padding, 20px, 30px);
+      &--last{
+       
+        align-items: center;
+        .passengers__cards-button{
+          @include fluid(width, 220px, 290px);
+        }
+      }
+    }
+    &-name{
+      color: #576778;
+      @include fluid(font-size, 18px, 20px);
+      @include fluid(line-height, 22px, 24px);
+      @include fluid(margin-bottom, 8px, 10px);
+    }
+    &-date{
+      color: $lightGray;
+      @include fluid(font-size, 16px, 18px);
+      @include fluid(line-height, 19px, 21px);
+      @include fluid(margin-bottom, 30px, 50px);
+    }
+    &-buttons{
+      display: flex;
+    }
+    &-button{
+      background-color: $orange;
+        border-radius: 10px;
+        color: #FFFFFF;
+        cursor: pointer;
+        text-transform: uppercase;
+        @include fluid(width, 180px, 220px);
+        @include fluid(padding-top, 18px, 30px);
+        @include fluid(padding-bottom, 18px, 30px);
+        @include fluid(font-size, 12px, 18px);
+        @include fluid(line-height, 18px, 21px);
+        &:first-child{
+          @include fluid(margin-right, 10px, 20px)
+        }
+        &--gray{
+          background-color: $grey;
+        }
+        transition: all 0.3s ease;
+        &:hover{
+          background-color: $black;
+          color: $orange;
+        }
+    }
+    &-icon{
+      @include fluid(font-size, 42px, 74px);
+      color: $lightGray;
+      @include fluid(margin-bottom, 20px, 30px);
+    }
+  }
+  &__button{
+    background-color: $orange;
+    border-radius: 10px;
+    color: #FFFFFF;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    @include fluid(width, 220px, 280px);
+    @include fluid(padding-top, 18px, 30px);
+    @include fluid(padding-bottom, 18px, 30px);
+    @include fluid(font-size, 14px, 18px);
+    @include fluid(line-height, 18px, 21px);
+    &:hover{
+      background-color: $black;
+      color: $orange;
+    }
+  }
+}
+@media screen and (max-width: 1350px) {
+      .main{
+        background-position: 300px 100%, top, top;
+      }
+      .confirm{
+        margin-top: 100px;
+      }
+      .myData{
+        margin-top: 100px;
+      }
+      .tripChoice{
+        margin-top: 100px;
+      }
+      .passengersValue{
+        margin-top: 100px;
+      }
+      .passengers{
+        margin-top: 100px;
+      }
+      .wrapper{
+        margin-top: 100px;
+      }
+      .burger{
+        display: block;
+        position: relative;
+        width: 25px;
+        height: 25px;
+        z-index: 12;
+        cursor: pointer;
+        transition: 0.38s ease-in-out;
+        &::before,
+        &::after {
+          content: "";
+          background: $orange;
+          border-radius: 2px;
+          position: absolute;
+          width: 100%;
+          height: 2px;
+          left: 0;
+          top: 12px;
+          transition: 0.38s ease-in-out;
+        }
+        &::after {
+          top: 18px;
+        }
+        span {
+          content: "";
+          background: $orange;
+          border-radius: 2px;
+          position: absolute;
+          width: 100%;
+          height: 2px;
+          top: 6px;
+          transition: 0.38s ease-in-out;
+        }
+        &--open {
+          &::before,
+          &::after {
+            transform: rotate(135deg);
+            top: 10px;
+          }
+        }
+        &--open span {
+          transform: rotate(45deg);
+          top: 10px;
+        }
+  }
+  .faq{
+    margin-top: 100px;
+  }
+  .news{
+    margin-top: 100px;
+  }
+  .details{
+    margin-top: 100px;
+  }
+  .header{
+    position: fixed;
+    z-index: 5;
+    width: 100%;
+    top: 0;
+    &__icons{
+      display: none;
+      &--burger{
+        display: flex;
+        a{
+          display: block;
+          margin-bottom: 15px;
+        }
+      }
+    }
+    &__aunth{
+      display: none;
+      &--burger{
+        display: block;
+      }
+
+    }
+  }
+  .content{
+
+    &--mobileMarginTop{
+      margin-top: 115px;
+    }
+    &__partnership{
+      &-input{
+        max-width: 120px;
+    }
+    }
+  }
+}
+
+@media screen and (max-width: 1150px){
+  .content{
+    &__main{
+      &-text{
+        width: 55%;
+      }
+    }
+  }
+  .tripOrder{
+    &__inputs{
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    &__from, &__to, &__when{
+      width: 45%;
+    }
+    &__to{
+      margin: 0;
+      margin-bottom: 20px;
+    }
+    &__form{
+      width: 100%;
+    }
+    &__input{
+      width: 100%;
+
+    }
+    &__btn{
+      width: 44%;
+    }
+  }
+}
+
+@media screen and (max-width: 1050px){
+  .header{
+    &__nav{
+      display: none;
+      &--burger{
+        display: block;
+        li{
+          margin-bottom: 15px;
+        }
+      }
+    }
+    &__burger{
+      &-nav{
+        display: block;
+      }
+    }
+  }
+
+  .footer{
+    &__logoItem{
+      margin-right: 20px;
+    }
+    &__links{
+      flex-direction: column;
+      &-item{
+        
+        &:not(:last-child){
+          margin-bottom: 39px;
+        }
+
+      }
+    }
+    &__phone{
+      &-icon{
+        display: none;
+      }
+      &-number{
+        text-align: right;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .details{
+
+    &__wrapper{
+      align-items: flex-start;
+    }
+    &__progress{
+
+      margin-bottom: 20px;
+      &-item{
+        margin-bottom: 8px;
+
+      }
+    }
+  }
+  .modal{
+    &__btn{
+      width: 100%;
+    }
+    &__form{
+      width: 100%;
+    }
+  }
+  .content{
+    &__partnership{
+      &-left{
+        width: 100%;
+        padding-top: 20px;
+        padding-bottom: 0;
+      }
+      &-leftTitle{
+        margin-bottom: 0;
+
+      }
+      &-right{
+        width: 100%;
+        padding-bottom: 25px;
+        margin-top: 0;
+      }
+      &-input{
+        max-width: none;
+      }
+      &-top{
+        justify-content: space-between;
+      }
+      &-bottom{
+        flex-direction: row-reverse;
+      }
+      &-topItem{
+        width: 30%;
+        input{
+          width: 100%;
+        }
+      }
+      &-btn{
+        margin-left: 15px;
+        margin-right: 0;
+      }
+    }
+  }
+  .news{
+    &__list{
+      &-item{
+        width: 47%;
+        &:not(:nth-child(3n)){
+          margin: 0;
+          margin-bottom: 30px;
+        }
+        &:not(:nth-child(2n)){
+          margin-right: 20px;
+        }
+      }
+    }
+  }
+  .confirm{
+    .tripChoice{
+
+      &__arrival{
+        justify-content: flex-start;
+      }
+      &__departure{
+        width: 50%;
+      }
+      &__arrival{
+        width: 43%;
+      }
+    }
+  }
+  .passengers{
+    &__cards{
+      &-item{
+        width: 48%;
+      }
+    }
+  }
+  .myData{
+    &__text{
+      width: 70%;
+    }
+  }
+  .tripChoice{
+    &__wrapper{
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    &__departure{
+      margin-bottom: 20px;
+      width: 50%;
+    }
+  
+    &__sort{
+      width: 100%;
+    }
+    &__arrival{
+      width: 43%;
+    }
+    &__options{
+      width: 50%;
+      &-left{
+        margin-right: 30px;
+      }
+    }
+    &__confirm{
+      width: 43%;
+    }
+    &__list{
+      &-item{
+        padding-left: 40px;
+        padding-right: 40px;
+        &--fast{
+          &::before{
+            top: 18px;
+            border-radius: 10px;
+          }
+        }
+        &--moscow{
+          &::before{
+            top: 18px;
+            border-radius: 10px;
+          }
+        }
+        &--firmal{
+          &::before{
+            top: 18px;
+            border-radius: 10px;
+          }
+        }
+      }
+    }
+  }
+  .partnership{
+    &__container{
+      flex-direction: column;
+    }
+
+  }
+  .details{
+    &__progress{
+      flex-direction: column;
+      margin-bottom: 10px;
+      &-item{
+        &:not(:last-child){
+          margin-bottom: 10px;
+        }
+        &::after{
+          content: '';
+          display: none;
+        }
+      }
+    }
+    &__content{
+      flex-direction: column;
+    }
+    &__left {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    &__right{
+      width: 100%;
+    }
+    &__card{
+      &-conditions{
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
+    &__conditions{
+      &-item{
+        width: 50%;
+      }
+    }
+    
+  }
+  .tripOrder{
+    &__to{
+      width: 44%;
+    }
+    &__btn{
+      width: 43%;
+    }
+  }
+}
+
+@media screen and (max-width: 768px){
+  .header{
+    &__phone{
+      display: none;
+      &--burger{
+        display: block;
+        margin-bottom: 15px;
+      }
+      &-number{
+        margin-bottom: 15px;
+      }
+    }
+    &__burger{
+      &-number{
+        display: block;
+      }
+    }
+  }
+  .main{
+    background-position: 70px 100%, top, top;
+  }
+  .myData{
+    &__text{
+      width: 100%;
+    }
+    &__inputs{
+      flex-wrap: wrap;
+      &-bottom{
+        .myData__inputs-item{
+          margin-bottom: 15px;
+        }
+      }
+      &-item{
+        width: 100%;
+      }
+    }
+    &__select{
+      width: 100%;
+      margin-bottom: 15px;
+    }
+  }
+  .details{
+    &__progress{
+      flex-direction: column;
+      &-item{
+        &:not(:last-child){
+          margin-bottom: 10px;
+        }
+        &::after{
+          content: '';
+          display: none;
+        }
+      }
+    }
+    &__card{
+      &-conditions{
+        flex-direction: column;
+      }
+    }
+    &__conditions{
+      &-item{
+        width: 100%;
+      }
+    }
+  }
+  .faq{
+    &__left{
+      flex-direction: column
+    }
+    &__text{
+      width: 100%;
+      &-hidden{
+        margin-top: 20px;
+        width: 100%;
+      }
+    }
+  }
+  .confirm{
+    .tripChoice{
+      &__wrapper{
+        
+      }
+      &__text{
+        margin-bottom: 5px;
+        text-align: end !important;
+      }
+      &__options{
+        margin-bottom: 10px;
+        >div{
+          width: fit-content !important; 
+        }
+        &-bottom{
+          margin-top: 0;
+        }
+      }
+      &__priceValue, &__passengersValue, &__total-value{
+        text-align: start !important;
+      }
+      &__btn{
+        text-align: center !important;
+        &--gray{
+          text-align: center !important;
+          div{
+            text-align: center !important;
+            margin-bottom: 0 !important;
+          }
+        }
+      }
+    }
+  }
+  .passengers{
+    &__text{
+      width: 85%;
+    }
+    &__cards{
+      &-item{
+        width: 100%;
+      }
+      &-button{
+        width: 48%;
+      }
+    }
+  }
+  .tripOrder{
+    &__inputs{
+      flex-direction: column;
+      align-items: flex-start;
+    
+    }
+    &__to, &__when, &__from{
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    &__btn{
+      width: 100%;
+      margin-left: 0;
+    }
+    &__form{
+      width: 100%;
+    }
+    &__input{
+      width: 100%;
+    }
+    &__switch{
+      align-self: center;
+      margin-bottom: 5px;
+    }
+    &__btn-hidden{
+      width: 100%;
+
+    }
+    &__icon{
+      margin-right: 7px;
+    }
+    &__options{
+      div{
+        &:first-child{
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+  .news{
+    &__content{
+      justify-content: flex-start;
+    }
+    &__wrapper{
+      margin-bottom: auto;
+    }
+    &__text{
+      margin-bottom: 0;
+    }
+  }
+  .content{
+    &__main{
+      padding-top: 40px;
+    }
+  }
+  .tripChoice{
+    &__wrapper{
+      padding-top: 5px;
+      width: 100%;
+      flex-direction: column;
+      &>div{
+        width: 100% !important;
+      }
+    }
+    &__filter{
+      flex-direction: column;
+      overflow-x:visible;
+    }
+    &__sort{
+      margin-right: 0;
+    }
+    &__departure{
+      padding-bottom: 10px;
+      border-bottom: 1px solid $lightGray;
+      margin-bottom: 10px;
+    }
+    &__arrival{
+      padding-bottom: 10px;
+      border-bottom: 1px solid $lightGray;
+      margin-bottom: 10px;
+    }
+    &__top{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      div{
+        margin: 0;
+      }
+    }
+    &__place{
+      text-align: end;
+    }
+    &__options{
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      &-left{
+        margin: 0;
+      }
+    }
+    &__passengersValue{
+      text-align: right;
+    }
+    &__list{
+      &-item{
+        padding-left: 20px;
+        padding-right: 20px;
+        &--moscow, &--fast, &--firmal{
+          &::before{
+            top: 1px;
+            left: 20px;
+          }
+        }
+      }
+    }
+    &__priceValue{
+      margin: 0;
+    }
+    &__btn{
+      width: 100%;
+    }
+    &__enabled{
+      align-self: flex-end;
+    }
+    &__timeValue{
+      text-align: end;
+    }
+  }
+  .passengersValue{
+    &__card{
+      width: 100%;
+    }
+  }
+}
+@media screen and (max-width: 576px) {
+  .breadcrumbs{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    &__link{
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 5px;
+      &::before{
+        margin-bottom: 5px;
+      }
+    }
+  }
+  .content{
+    &__partnership{
+      &-right{
+        margin-top: 0;
+      }
+      &-top{
+        flex-direction: column;
+      }
+      &-topItem{
+        width: 100%;
+        margin-bottom: 15px;
+      }
+      &-bottom{
+        flex-direction: column;
+      }
+      &-btn{
+        width: 100%;
+        margin: 0;
+        margin-bottom: 15px;
+      }
+      &-info{
+        width: 100%;
+        max-width: none;
+      }
+    }
+  }
+  .tripChoice{
+    &__wrapper{
+      width: 100%;
+      flex-direction: column;
+      &>div{
+        width: 100% !important;
+      }
+    }
+    &__departure{
+      padding-bottom: 10px;
+      border-bottom: 1px solid $lightGray;
+      margin-bottom: 10px;
+    }
+    &__arrival{
+      padding-bottom: 10px;
+      border-bottom: 1px solid $lightGray;
+      margin-bottom: 10px;
+    }
+    &__top{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      div{
+        margin: 0;
+      }
+    }
+    &__place{
+      text-align: end;
+    }
+    &__options{
+      display: flex;
+      justify-content: space-between;
+      &-left{
+        margin: 0;
+      }
+    }
+    &__list{
+      &-item{
+        &--moscow, &--fast, &--firmal{
+          &::before{
+            top: 2px;
+            left: 20px;
+          }
+        }
+      }
+    }
+    &__priceValue{
+      margin: 0;
+    }
+    &__btn{
+      width: 100%;
+    }
+    &__enabled{
+      align-self: flex-end;
+    }
+    &__timeValue{
+      text-align: end;
+    }
+  }
+  .details{
+    &__card{
+      &-info{
+        flex-direction: column;
+      }
+      &-left{
+        margin-bottom: 10px;
+        flex-shrink: 0;
+      }
+      &-right{
+        width: 100%;
+      }
+    }
+  }
+
+  .details{
+    &__wrapper{
+      flex-direction: column;
+    }
+    &__progress{
+    }
+    &__text{
+      margin-top: 20px;
+    }
+    &__back{
+      align-self: flex-end;
+    }
+  }
+
+  .footer{
+    &__logoItem{
+      &-text{
+        display: none;
+      }
+      &-img{
+        margin-bottom: 15px;
+      }
+    }
+    &__text{
+      display: block;
+      color: $lightGray;
+    }
+    &__container{
+      flex-direction: column;
+    }
+    &__left{
+      flex-direction: column;
+    }
+    &__right{
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    &__links{
+      &-item{
+        margin-bottom: 15px !important;
+      }
+    }
+    &__text{
+      margin-bottom: 15px;
+    }
+    &__phone{
+      margin-bottom: 15px;
+    }
+  }
+  .modal{
+    &__box{
+      width: 90%;
+    }
+  }
+}

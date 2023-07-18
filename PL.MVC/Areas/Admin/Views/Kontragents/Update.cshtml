@@ -1,0 +1,70 @@
+﻿@using Common.Enums;
+@using PL.MVC.Extensions
+@model PL.Entities.KontragentIdentity.KontragentIdentity
+
+@{
+	var exists = Model != null;
+	ViewBag.Title = (exists ? "Редактирование" : "Создание") + " контрагента";
+}
+
+<form asp-controller="@Url.GetController()" asp-action="Update" asp-antiforgery="true" method="post">
+	<div class="row">
+		<input type="hidden" asp-for="Id" />
+		<div class="col-md-4 col-sm-6">
+			<div class="form-group">
+				<label asp-for="Title">Название</label>
+				<input type="text" asp-for="Title" class="form-control" />
+				<span asp-validation-for="Title" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-6">
+			<div class="form-group">
+				<label asp-for="ContractEmail">Емеил</label>
+				<input type="text" asp-for="ContractEmail" class="form-control" />
+				<span asp-validation-for="ContractEmail" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-6">
+			<div class="form-group">
+				<label asp-for="ContractPhone">Телефон</label>
+				<input type="text" asp-for="ContractPhone" class="form-control" />
+				<span asp-validation-for="ContractPhone" class="text-danger"></span>
+			</div>
+		</div>
+		@*<div class="col-md-4 col-sm-6">
+			<div class="form-group">
+				<label asp-for="Discriminator">Тип</label>
+				<input type="text" asp-for="Discriminator" class="form-control" />
+				<span asp-validation-for="Discriminator" class="text-danger"></span>
+			</div>
+		</div>*@
+		<div class="col-md-4 col-sm-6">
+			<div class="form-group">
+				<label>Тип</label>
+				<select title="Тип" asp-for="Discriminator" class="form-control">
+					@foreach (var type in Enum.GetNames(typeof(KontragentIdentityType)).ToList())
+					{
+						if (type == Model?.Discriminator)
+						{
+							<option selected value='@type'>
+								@type
+							</option>
+						}
+						else
+						{
+							<option value='@type'>
+								@type
+							</option>
+						}
+					}
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<button class="btn btn-outline-primary" type="submit">@(exists ? "Сохранить" : "Добавить")</button>
+			<a asp-controller="@Url.GetController()" asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+		</div>
+	</div>
+</form>

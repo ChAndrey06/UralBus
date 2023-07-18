@@ -1,0 +1,94 @@
+﻿@using PL.Entities.Order
+@using System.Globalization
+@model Order
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    CultureInfo cultureInfo = new CultureInfo("ru-RU");
+    string depMonthName = cultureInfo.DateTimeFormat.GetMonthName(Model.Trip.DepartureTime.Month);
+    string arrMonthName = cultureInfo.DateTimeFormat.GetMonthName(Model.Trip.ArrivalTime.Value.Month);
+    int tickets = Model.ChildrenCount + Model.AdultsCount;
+}
+
+<section class="content confirm">
+    <div class="content__container confirm__container">
+        <div class="breadcrumbs">
+            <a href="" class="breadcrumbs__link">Главная</a>
+            <a href="" class="breadcrumbs__link">Рейсы</a>
+        </div>
+        <div class="heading heading--mbsmall">@Model.Trip.DepartureRoutePoint.Title – @Model.Trip.ArrivalRoutePoint.Title</div>
+        <div class="details__wrapper">
+            <div class="details__progress">
+                <div class="details__progress-item">
+                    <div class="details__progress-bubble">
+                        <div class="details__progress-number">1</div>
+                    </div>
+                    <div class="details__progress-text">Место посадки</div>
+                </div>
+                <div class="details__progress-item">
+                    <div class="details__progress-bubble">
+                        <div class="details__progress-number">2</div>
+                    </div>
+                    <div class="details__progress-text">Кол-во пассажиров</div>
+                </div>
+                <div class="details__progress-item  details__progress-item--active">
+                    <div class="details__progress-bubble">
+                        <div class="details__progress-number">3</div>
+                    </div>
+                    <div class="details__progress-text">Подтверждение данных</div>
+                </div>
+            </div>
+            <div class="details__back">
+                <div class="details__back-icon icon-Frame-18"></div>
+                <button onclick="history.back()" class="details__back-text">Вернуться назад</button>
+            </div>
+        </div>
+        <div class="confirm__content">
+            <div class="tripChoice__list-item confirm__item">
+                <div class="tripChoice__wrapper">
+                    <div class="tripChoice__departure">
+                        <div class="tripChoice__top">
+                            <div class="tripChoice__date">@(Model.Trip.DepartureTime.ToString("dd ") + depMonthName.ToLower())</div>
+                            <div class="tripChoice__time">@Model.Trip.DepartureTime.TimeOfDay.ToString(@"hh\:mm")</div>
+                        </div>
+                        <div class="tripChoice__bottom">
+                            <div class="tripChoice__text">Место посадки</div>
+                            <div class="tripChoice__place">@Model.StartTripRoutePoint.RoutePoint.Title</div>
+                        </div>
+                    </div>
+                    <div class="tripChoice__arrival">
+                        <div class="tripChoice__top">
+                            <div class="tripChoice__date">@(Model.Trip.ArrivalTime.Value.ToString("dd ") + arrMonthName.ToLower())</div>
+                            <div class="tripChoice__time">@Model.Trip.ArrivalTime.Value.TimeOfDay.ToString(@"hh\:mm")</div>
+                        </div>
+                        <div class="tripChoice__bottom">
+                            <div class="tripChoice__text">Место прибытия</div>
+                            <div class="tripChoice__place">@Model.EndTripRoutePoint.RoutePoint.Title</div>
+                        </div>
+                    </div>
+                    <div class="tripChoice__options">
+                        <div class="tripChoice__options-left">
+                            <div class="tripChoice__price">Цена</div>
+                            <div class="tripChoice__priceValue">@Model.Price ₽</div>
+                        </div>
+                        <div class="tripChoice__options-right">
+                            <div class="tripChoice__passengers">Пассажиров</div>
+                            <div class="tripChoice__passengersValue">@tickets</div>
+                        </div>
+                        <div class="tripChoice__options-bottom">
+                            <div class="tripChoice__total">Итого</div>
+                            <div class="tripChoice__total-value">@Model.TotalPrice <span>₽</span></div>
+                        </div>
+                    </div>
+                    <div class="tripChoice__confirm tripChoice__confirm">
+                        <div class="tripChoice__btn tripChoice__btn--myTrip">купить @tickets билета</div>
+                        <div class="tripChoice__btn tripChoice__btn--myTrip tripChoice__btn--gray">Забронировать<div>Оплата наличными при посадке</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="confirm__btn">условия возврата</div>
+        </div>
+    </div>
+</section>

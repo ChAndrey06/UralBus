@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="ProfileService\**" />
+      <EmbeddedResource Remove="ProfileService\**" />
+      <None Remove="ProfileService\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BLL.Entities\BLL.Entities.csproj" />
+      <ProjectReference Include="..\BLL.Interfaces\BLL.Interfaces.csproj" />
+      <ProjectReference Include="..\BLL.Logic\BLL.Logic.csproj" />
+      <ProjectReference Include="..\PL.Entities\PL.Entities.csproj" />
+      <ProjectReference Include="..\PL.Mappings\PL.Mappings.csproj" />
+      <ProjectReference Include="..\PL.Services.Interfaces\PL.Services.Interfaces.csproj" />
+    </ItemGroup>
+
+</Project>

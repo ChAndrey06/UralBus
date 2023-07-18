@@ -1,0 +1,95 @@
+﻿@using PL.Services.Client.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Newtonsoft.Json
+@using PL.Services.Client
+@model TripsFilterModel
+@inject RoutePointsService RoutePointsService
+@{
+    ViewBag.BasicPoints = await RoutePointsService.GetBasicPoints();
+}
+<form asp-controller="Trips" asp-action="Index" asp-antiforgery="false" method="get" id="form-filter">
+    <div class="tripOrder">
+        <input type="hidden" asp-for="OrderByQuery" id="trip-orderBy-query" value=""/>
+        <div class="tripOrder__inputs">
+            <div class="tripOrder__from">
+                <div class=" tripOrder__text">Откуда</div>
+                <div class="tripOrder__form">
+                    <div class="tripOrder__icon icon-Location"></div>
+                    <select class="tripOrder__input" id="from"></select>
+                    <input asp-for="FromRoutePointId" value="@Model?.FromRoutePointId" id="fromRoutePointId" type="hidden"/>
+                    <!-- <input asp-for="FromRoutePointId" class="tripOrder__input" id="from" value="Челябинск" type="text"> -->
+                    <!-- <div>
+                        <datalist id="suggestions">
+                            <option>First option</option>
+                            <option>Second Option</option>
+                        </datalist>
+                        <input autoComplete="on" list="suggestions" />
+                    </div> -->
+                </div>
+            </div>
+            <div class="tripOrder__switch">
+                <div class="tripOrder__icon tripOrder__switch-icon icon-Frame-74"></div>
+            </div>
+            <div class="tripOrder__to">
+                <div class="tripOrder__text">Куда</div>
+                <div class="tripOrder__form">
+                    <div class="tripOrder__icon icon-Location"></div>
+                    <select class="tripOrder__input" id="to"></select>
+                    <input asp-for="ToRoutePointId" value="@Model?.ToRoutePointId" id="toRoutePointId" type="hidden"/>
+                    @*<input class="tripOrder__input" id="to" type="text">*@
+                    <!-- <input asp-for="ToRoutePointId" class="tripOrder__input" id="to" value="Екатеринбург" type="text"> -->
+                </div>
+            </div>
+            <div class="tripOrder__when">
+                <div class="tripOrder__text">Когда</div>
+                <div class="tripOrder__form">
+                    <div class="tripOrder__icon icon-Location"></div>
+                    <input asp-for="DepartureTime" class="tripOrder__input" type="date" value="2023-04-13">
+                    <div class="tripOrder__options">
+                        <div>Завтра</div>
+                        <div>Послезавтра</div>
+                    </div>
+                </div>
+            </div>
+            <button class="tripOrder__btn">
+                ВЫБРАТЬ РЕЙС
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+//TODO REFACTOR
+    // Define the globalVariables object if it doesn't exist
+
+    // Add the FilterModel property to the globalVariables object
+    //;
+    
+   var filter = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(ViewBag.FilterModel))');
+   var basicPoints = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(ViewBag.BasicPoints))');
+   
+   if (filter?.From?.Id == null) {
+       filter = {
+           From: {
+               Id: basicPoints[0].Id,
+               Title: basicPoints[0].Title
+               },
+           To: {
+               Id: basicPoints[1].Id,
+               Title: basicPoints[1].Title
+               },
+           Departure: new Date()
+       };
+   }
+
+    const fromRoutePointEl = document.getElementById('fromRoutePointId');
+    const toRoutePointEl = document.getElementById('toRoutePointId');
+    
+    fromRoutePointEl.value = (fromRoutePointEl.value || basicPoints[0].Id);
+    toRoutePointEl.value = (toRoutePointEl.value || basicPoints[1].Id);
+
+    // document.getElementById('fromRoutePointId').value=basicPoints[0].Id;
+    // document.getElementById('toRoutePointId').value=basicPoints[1].Id;
+    
+    localStorage.setItem('filter', JSON.stringify(filter));
+</script>

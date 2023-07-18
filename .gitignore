@@ -1,0 +1,9 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.idea/*
+/.vs
+/PL.CrudTesting.API/PL.CrudTesting.API.csproj.user
+/PL.MVC/PL.MVC.csproj.user

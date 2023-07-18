@@ -1,0 +1,142 @@
+﻿@using PL.MVC.Extensions
+@model PL.Entities.TripDraft.TripDraft
+
+@{
+    var exists = Model != null;
+    ViewBag.Title = (exists ? "Редактирование" : "Создание") + " шаблона рейса";
+}
+
+<form asp-controller="@Url.GetController()" asp-action="Update" asp-antiforgery="true" method="post">
+    <div class="row">
+        <input type="hidden" asp-for="Id" />
+        <div class="col-md-4 col-sm-6">
+	        <div class="form-group">
+		        <label asp-for="StartTimeOfDay">Время отправления</label>
+		        <input type="type" asp-for="StartTimeOfDay" class="form-control" />
+		        <span asp-validation-for="StartTimeOfDay" class="text-danger"></span>
+	        </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+	        <select asp-for="StartDayOfWeek" class="form-control">
+		        <option value="Monday">Понедельник</option>
+                <option value="Tuesday">Вторник</option>
+                <option value="Wednesday">Среда</option>
+                <option value="Thursday">Четверг</option>
+                <option value="Friday">Пятница</option>
+                <option value="Saturday">Суббота</option>
+                <option value="Sunday">Воскресенье</option>
+            </select>
+
+        </div>
+	    <div class="col-md-4 col-sm-6">
+		    <div class="form-group">
+			    <label asp-for="StartDayOfWeek">Цена</label>
+
+			    <span asp-validation-for="StartDayOfWeek" class="text-danger"></span>
+		    </div>
+	    </div>
+	    <div class="col-md-4 col-sm-6">
+		    <div class="form-group">
+			    <label>Маршрут</label>
+			    <input asp-for="TripRouteId" id="tripRouteId" type="hidden" value="@Model.TripRoute?.Id"/>
+			    <input id="tripRouteTitle" type="hidden" value="@Model.TripRoute?.Title"/>
+			    <select id="tripRouteSelect"></select>
+		    </div>
+	    </div>
+	    <div class="col-md-4 col-sm-6">
+		    <div class="form-group">
+			    <label>Транспорт</label>
+			    <input asp-for="TransportId" id="transportId" type="hidden" value="@Model.Transport?.Id"/>
+			    <input id="transportTitle" type="hidden" value="@Model.Transport?.Title"/>
+			    <select id="transportSelect"></select>
+		    </div>
+	    </div>
+	    <div class="col-md-4 col-sm-6">
+		    <div class="form-group">
+			    <label>Водитель</label>
+			    <input asp-for="DriverId" id="driverId" type="hidden" value="@Model.Driver?.Id"/>
+			    <input id="driverName" type="hidden" value="@Model.Driver?.FullName"/>
+			    <select id="driverSelect"></select>
+		    </div>
+	    </div>
+	    <div class="col-md-4 col-sm-6">
+		    <div class="form-group">
+			    <label>Перевозчик</label>
+			    <input asp-for="CarrierId" id="сarrierId" type="hidden" value="@Model.Carrier?.Id"/>
+			    <input id="сarrierTitle" type="hidden" value="@Model.Carrier?.Title"/>
+			    <select id="сarrierSelect"></select>
+		    </div>
+	    </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <button class="btn btn-outline-primary" type="submit">@(exists ? "Сохранить" : "Добавить")</button>
+            <a asp-controller="@Url.GetController()" asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/js/admin/selectizeHelper.js"></script>
+    <script>		
+	$(document).ready(() => {
+	    initSelectize(
+	        'сarrierSelect',
+	        'сarrierId',
+	        'id',
+	        'title',
+	        'title',
+	        'Начните печатать...',
+	        '/autocomplete/kontragents', {
+	            id: $('#сarrierId').val(),
+	            title: $('#сarrierTitle').val()
+	        }, {
+	            discriminator: 'carrier',
+	            limit: 10
+	        }
+	    );
+	    initSelectize(
+	        'driverSelect',
+	        'driverId',
+	        'id',
+	        'fullName',
+	        'fullName',
+	        'Начните печатать...',
+	        '/autocomplete/drivers', {
+	            id: $('#driverId').val(),
+	            fullName: $('#driverName').val()
+	        }, {
+	            limit: 10
+	        }
+	    );
+	    initSelectize(
+	        'tripRouteSelect',
+	        'tripRouteId',
+	        'id',
+	        'title',
+	        'title',
+	        'Начните печатать...',
+	        '/autocomplete/tripRoutes', {
+	            id: $('#tripRouteId').val(),
+	            title: $('#tripRouteTitle').val()
+	        }, {
+	            limit: 10
+	        }
+	    );
+	    initSelectize(
+	        'transportSelect',
+	        'transportId',
+	        'id',
+	        'title',
+	        'title',
+	        'Начните печатать...',
+	        '/autocomplete/transports', {
+	            id: $('#transportId').val(),
+	            title: $('#transportTitle').val()
+	        }, {
+	            limit: 10
+	        }
+	    );
+	});
+	</script>
+}

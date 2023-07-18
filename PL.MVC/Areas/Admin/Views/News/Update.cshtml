@@ -1,0 +1,58 @@
+﻿@using PL.MVC.Extensions
+@model PL.Entities.News.News
+
+@{
+	var exists = Model != null;
+	ViewBag.UseFileManager = true;
+	ViewBag.Title = (exists ? "Редактирование" : "Создание") + " новости";
+}
+
+<form asp-controller="@Url.GetController()" asp-action="Update" asp-antiforgery="true" method="post" enctype="multipart/form-data">
+	<div class="row">
+		<input type="hidden" asp-for="Id" />
+		<input type="hidden" asp-for="FileId" />
+		<div class="col-md-4 col-sm-6">
+			<div class="form-group">
+				<label asp-for="Title">Заголовок</label>
+				<input type="text" asp-for="Title" class="form-control" />
+				<span asp-validation-for="Title" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-6">
+			<div class="form-group">
+				<label asp-for="Description">Описание</label>
+				<textarea type="text" asp-for="Description" class="form-control"></textarea>
+				<span asp-validation-for="Description" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-6 col media">
+			<div class="form-group">
+				<label asp-for="FilePath">Картинка</label>
+				<div style="background-image: url('@Url.GetImageUrl(@Model?.File?.Path)');" class="media-thumbnail"></div>
+				<div class="input-group">
+					<input type="text" asp-for="FilePath" value="@Model?.File?.Path" class="form-control file-image-url" />
+					<span class="input-group-append">
+						<a title="Обзор" class="btn btn-outline-secondary open-file-manager-button">...</a>
+					</span>
+				</div>
+				<span asp-validation-for="FilePath" class="text-danger"></span>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<button class="btn btn-outline-primary" type="submit">@(exists ? "Сохранить" : "Добавить")</button>
+			<a asp-controller="@Url.GetController()" asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+		</div>
+	</div>
+</form>
+
+
+@section Scripts
+{
+	<script>
+		$(document).ready(function (pageUtils) {
+            window.pageUtils.bindDefaultFileManagerHandlers('.open-file-manager-button');
+        });
+	</script>
+}

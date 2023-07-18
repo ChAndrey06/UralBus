@@ -1,0 +1,375 @@
+﻿@using System.Security.Claims
+@using PL.MVC.Extensions
+@using PL.Services.Client
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="~/css/normalize.css">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="~/plugins/selectize/css/selectize.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+  <link rel="stylesheet" href="~/css/style.css?v=11">
+  <link rel="stylesheet" href="~/css/icon.css">
+  <title>@ViewBag.Title</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header__container">
+            <div class="header__blockLeft">
+                <a href="#" class="header__logo">
+                    <img src="./img/picture/UralBus3 1.svg" href="@Url.Action("Index", "Home")" alt="" class="header__logo-img">
+                </a>
+                <ul class="header__nav">
+                    <li class="header__nav-item"><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                    <li class="header__nav-item"><a href="@Url.Action("Index", "News")">Новости</a></li>
+                    <li class="header__nav-item"><a href="#">Акции</a></li>
+                    <li class="header__nav-item"><a href="@Url.Action("Index", "FAQs")">Часто задаваемые вопросы</a></li>
+                </ul>
+            </div>
+            <div class="header__blockRight">
+                <div class="header__phone">
+                    <div class="header__phone-icon icon-Phone"></div>
+                    <a class="header__phone-number" href="tel:@ViewBag.Config.PhoneNumber">@ViewBag.Config.PhoneNumber</a>
+                </div>
+                <div class="header__icons">
+                    <a href="#" class="header__icons-item icon-Telegram"></a>
+                    <a href="#" id="header-icon" class="header__icons-item header__icons-item--notauthorized  icon-profile"></a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="header__userOptions header__userOptions--hidden">
+                            <div class="header__userOptions-account">
+                                Личный кабинет
+                            </div>
+                            <div class="header__userOptions-nav">
+                                <div onclick="location.href='@Url.Action("Index","MyTrips")'">Мои поездки</div>
+                                <div onclick="location.href='@Url.Action("Index","ClientProfile")'">Мои данные</div>
+                                <div onclick="location.href='@Url.Action("Index","PassengersData")'">Данные пассажиров</div>
+                                <div>Платёжные данные</div>
+                                <div id="delete">Удалить аккаунт</div>
+                            </div>
+                            <div id="exit" class="header__userOptions-exit">
+                                <form method="get" asp-action="Logout" asp-controller="Auth" asp-area="Public">
+                                    <input value="Выход" type="submit" />
+                                </form>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <div class="header__aunth header__aunth--notauthorized">
+                        <span class="enter">Вход</span> / <span class="register">Регистрация </span>
+                    </div>
+                }
+                else
+                {
+                    <div class="header__aunth">
+                        <span>@User.GetUserData()?.PhoneNumber</span>
+                    </div>
+                }
+                <div class="burger">
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class="header__burger">
+            <div class="header__container header__burger-container">
+                <ul class="header__nav header__nav--burger">
+                    <li class="header__nav-item"><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                    <li class="header__nav-item"><a href="#">Акции</a></li>
+                    <li class="header__nav-item"><a href="#">Часто задаваемые вопросы</a></li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="header__nav-item header__nav-item--extra"><a href="#">Личный кабинет</a></li>
+                        <li class="header__nav-item header__nav-item--extra"><a href="#">Мои поездки</a></li>
+                        <li class="header__nav-item header__nav-item--extra"><a href="@Url.Action("Index", "ClientProfile")">Мои данные</a></li>
+                        <li class="header__nav-item header__nav-item--extra"><a href="#">Данные пассажиров</a></li>
+                        <li class="header__nav-item header__nav-item--extra"><a href="#">Платёжные данные</a></li>
+                        <li class="header__nav-item header__nav-item--extra"><a href="#" id="delete-burger">Удалить аккаунт</a></li>
+                        <li class="header__nav-item header__nav-item--extra">
+                            <form method="get" asp-action="Logout" asp-controller="Auth" asp-area="Public">
+                                <input value="Выход" id="exit-burger" type="submit" />
+                            </form>
+                        </li>
+                    }
+                </ul>
+                <a class="header__phone-number header__phone-number--burger" href="tel:@ViewBag.Config.PhoneNumber">@ViewBag.Config.PhoneNumber</a>
+                <div class="header__icons header__icons--burger">
+                    <a href="#" class="header__icons-item icon-Telegram"></a>
+                    <a id="header-icon--burger" href="#"
+                       class="header__icons-item header__icons-item--notauthorized icon-profile"></a>
+                </div>
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <div class="header__aunth header__aunth--burger header__aunth--notauthorized">
+                        <span class="enter">Вход</span> / <span class="register">Регистрация </span>
+                    </div>
+                }
+                else
+                {
+                    <div class="header__aunth header__aunth--burger">
+                        <span>@User.GetUserData()?.PhoneNumber</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </header>
+
+    @RenderBody()
+
+    <footer class="footer">
+        <div class="footer__container">
+            <div class="footer__left">
+                <div class="footer__logoItem">
+                    <a href="#">
+                        <img class="footer__logoItem-img" src="./img/picture/UralBus3 2.svg" alt="">
+                    </a>
+                    <div class="footer__logoItem-text">2023 © ООО "УралБус". <span>Все права защищены</span></div>
+                </div>
+                <div class="footer__navItem">
+                    <ul class="footer__links">
+                        <li class="footer__links-item footer__links-item--white"><a href="">Главная</a></li>
+                        <li class="footer__links-item"><a href="">Акции</a></li>
+                        <li class="footer__links-item"><a href="">Часто задаваемые вопросы</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer__right">
+                <div class="footer__text">2023 © ООО "УралБус". <span>Все права защищены</span></div>
+                <div class="footer__phone">
+                    <div class="footer__phone-icon icon-Phone"></div>
+                    <a class="footer__phone-number" href="tel:8 (962) 616-59-99">8 (962) 616-59-99</a>
+                </div>
+
+                <a href="https://spaceapp.ru/razrabotka" class="footer__link">
+                    <div class="footer__link-text">
+                        Разработка сайта
+                    </div>
+                    <img src="./img/picture/spaceapp.svg" alt="" class="footer__link-icon">
+                </a>
+            </div>
+        </div>
+    </footer>
+    <div class="modal__overlay modal__overlay--hidden"></div>
+    <div class="modal__box modal__box--hidden">
+        <form id="form-registration" class="form" action="">
+            <div class="modal__content" id="modal">
+                <img src="./img/picture/UralBus3 21.svg" alt="" class="modal__logo">
+                <div class="modal__text">Для регистрации введите свой номер телефона</div>
+                <div class="modal__form">
+                    <select class="modal__select" name="state" placeholder="+7"></select>
+                    <input id="modal__input" class="modal__input" required type="tel">
+                </div>
+                <div class="myData__inputs-checkbox modal__check">
+                    <input required class="myData__checkbox modal__checkbox" type="checkbox" id="modalCheck">
+                    <label for="modalCheck">
+                      <div>Согласен с <a href='#'>политикой обработки персональных данных</a></div>
+                    </label>
+                </div>
+                <!-- TODO:REMOVE INLINE STYLE -->
+                <div id="registration-code-error" class="modal__error modal__text" style="display: none; color:red; align-self:center;"></div>
+                <div class="modal__btn-wrapper">
+                    <input type="submit" value="ЗАРЕГИСТРИРОВАТЬСЯ" class="modal__btn">
+                    <div class="modal__btn modal__btn--hidden">сохранить</div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal__registration modal__registration--hidden">
+        <form class="form-auth-phone" action="">
+            <input type="hidden" id="phone-number" />
+            <input type="hidden" id="country-code" value="+7" />
+            <div class="modal__content" id="modal">
+                <img src="./img/picture/UralBus3 21.svg" alt="" class="modal__logo">
+                <div class="modal__text">Для авторизации введите свой номер телефона</div>
+                <div class="modal__form">
+                    <select class="modal__select" name="state" placeholder="+7"></select>
+                    <input id="modal__aunth-input" class="modal__input" name="phone" required type="tel">
+                </div>
+                <!-- TODO:REMOVE INLINE STYLE -->
+                <div id="auth-error" class="modal__error modal__text" style="display: none; color:red;"></div> <!-- add this line -->
+                <div class="modal__btn-wrapper">
+                    <input type="submit" value="ВОЙТИ" class="modal__btn">
+                    <div id="aunth-btn" class="modal__btn  modal__btn--hidden">сохранить</div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal__code modal__code--hidden">
+        <div class="modal__content" id="modal">
+            <img src="./img/picture/UralBus3 21.svg" alt="" class="modal__logo">
+            <div class="modal__text">Введите код из смс. Он был отправлен на номер <span id="phone-number-span"></span></div>
+            <form id="form-auth-code" class="modal__form-wrapper" action="">
+                <div class="modal__form modal__code-value">
+                    <!-- последний инпут сделан чтобы собирать значения из каждого инпута в один -->
+                    <input class="modal__code-item" type="number" required>
+                    <input class="modal__code-item" type="number" required>
+                    <input class="modal__code-item" type="number" required>
+                    <input class="modal__code-item" type="number" required>
+                    <input type="hidden" id="form-auth-code-input" name="form-auth-code-input">
+                </div>
+                <!-- TODO:REMOVE INLINE STYLE -->
+                <div id="auth-code-error" class="modal__error modal__text" style="display: none; color:red; align-self:center;"></div>
+                <div class="modal__btn-wrapper">
+                    <input type="submit" value="ОТПРАВИТЬ" class="modal__code-btn">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="welcome welcome--hidden">
+        <div class="welcome__content">
+            <img src="./img/picture/UralBus3 21.svg" alt="" class="welcome__logo">
+            <div class="welcome__title">Добро пожаловать!</div>
+            <div class="welcome__text">Мы рады, что Вы пользуетесь услугами нашей компании</div>
+        </div>
+    </div>
+    <div class="delete delete--hidden">
+        <div class="delete__close"></div>
+        <div class="delete__content">
+            <img src="./img/picture/caution (2) 1.svg" alt="" class="delete__logo">
+            <div class="delete__text">Вы точно хотите удалить свой аккаунт?</div>
+            <form asp-controller="User" asp-action="Delete" asp-antiforgery="true" method="get" class="delete__buttons">
+                <button id="delete-btn" class="delete__buttons-item delete__buttons-item--gray">Да</button>
+                <div id="close" class="delete__buttons-item">Нет</div>
+            </form>
+        </div>
+    </div>
+    <!-- <div class="modal__box modal__box--hidden">
+      <form class="form" action="">
+        <div class="modal__content" id="modal">
+          <img src="./img/picture/UralBus3 21.svg" alt="" class="modal__logo">
+          <div class="modal__text">Введите свой номер телефона</div>
+          <div class="modal__form">
+            <select class="modal__select" name="state" placeholder="+7">
+            </select>
+            <input id="modal__input" name="phoneNumber" class="modal__input" required type="tel">
+          </div>
+          <div class="myData__inputs-checkbox modal__check">
+            <input required class="myData__checkbox modal__checkbox" type="checkbox" id="modalCheck">
+            <label for="modalCheck"><div>Согласен с политикой обработки персональных данных</div></label>
+          </div>
+          <input type="submit" value="далее" class="modal__btn">
+          <div class="modal__btn modal__btn--hidden">сохранить</div>
+        </div>
+      </form>
+    </div>
+    <div class="code__box modal__box--hidden">
+      <form class="form" action="">
+        <div class="modal__content" id="modal">
+          <img src="./img/picture/UralBus3 21.svg" alt="" class="modal__logo">
+          <div class="modal__text">Введите свой номер телефона</div>
+          <div class="modal__form">
+            <select class="modal__select" name="state" placeholder="+7">
+            </select>
+            <input id="modal__input" name="phoneNumber" class="modal__input" required type="tel">
+          </div>
+          <div class="myData__inputs-checkbox modal__check">
+            <input required class="myData__checkbox modal__checkbox" type="checkbox" id="modalCheck">
+            <label for="modalCheck"><div>Согласен с политикой обработки персональных данных</div></label>
+          </div>
+          <input type="submit" value="далее" class="modal__btn">
+          <div class="modal__btn modal__btn--hidden">сохранить</div>
+        </div>
+      </form>
+    </div>
+    <div class="welcome welcome--hidden">
+      <div class="welcome__content">
+        <img src="./img/picture/UralBus3 21.svg" alt="" class="welcome__logo">
+        <div class="welcome__title">Добро пожаловать!</div>
+        <div class="welcome__text">Мы рады, что Вы пользуетесь услугами нашей компании</div>
+      </div>
+    </div>
+    <div class="delete delete--hidden">
+      <div class="delete__close"></div>
+      <div class="delete__content">
+        <img src="./img/picture/caution (2) 1.svg" alt="" class="delete__logo">
+        <div class="delete__text">Вы точно хотите удалить свой аккаунт?</div>
+        <div class="delete__buttons">
+          <div id="delete-btn" class="delete__buttons-item delete__buttons-item--gray">Да</div>
+          <div id="close" class="delete__buttons-item">Нет</div>
+        </div>
+      </div>
+    </div> -->
+
+<!-- <div class="modal__box modal__box--hidden">
+  <form class="form" action="">
+    <div class="modal__content" id="modal">
+      <img src="./img/picture/UralBus3 21.svg" alt="" class="modal__logo">
+      <div class="modal__text">Введите свой номер телефона</div>
+      <div class="modal__form">
+        <select class="modal__select" name="state" placeholder="+7">
+        </select>
+        <input id="modal__input" name="phoneNumber" class="modal__input" required type="tel">
+      </div>
+      <div class="myData__inputs-checkbox modal__check">
+        <input required class="myData__checkbox modal__checkbox" type="checkbox" id="modalCheck">
+        <label for="modalCheck"><div>Согласен с политикой обработки персональных данных</div></label>
+      </div>
+      <input type="submit" value="далее" class="modal__btn">
+      <div class="modal__btn modal__btn--hidden">сохранить</div>
+    </div>
+  </form>
+</div>
+<div class="code__box modal__box--hidden">
+  <form class="form" action="">
+    <div class="modal__content" id="modal">
+      <img src="./img/picture/UralBus3 21.svg" alt="" class="modal__logo">
+      <div class="modal__text">Введите свой номер телефона</div>
+      <div class="modal__form">
+        <select class="modal__select" name="state" placeholder="+7">
+        </select>
+        <input id="modal__input" name="phoneNumber" class="modal__input" required type="tel">
+      </div>
+      <div class="myData__inputs-checkbox modal__check">
+        <input required class="myData__checkbox modal__checkbox" type="checkbox" id="modalCheck">
+        <label for="modalCheck"><div>Согласен с политикой обработки персональных данных</div></label>
+      </div>
+      <input type="submit" value="далее" class="modal__btn">
+      <div class="modal__btn modal__btn--hidden">сохранить</div>
+    </div>
+  </form>
+</div>
+<div class="welcome welcome--hidden">
+  <div class="welcome__content">
+    <img src="./img/picture/UralBus3 21.svg" alt="" class="welcome__logo">
+    <div class="welcome__title">Добро пожаловать!</div>
+    <div class="welcome__text">Мы рады, что Вы пользуетесь услугами нашей компании</div>
+  </div>
+</div>
+<div class="delete delete--hidden">
+  <div class="delete__close"></div>
+  <div class="delete__content">
+    <img src="./img/picture/caution (2) 1.svg" alt="" class="delete__logo">
+    <div class="delete__text">Вы точно хотите удалить свой аккаунт?</div>
+    <div class="delete__buttons">
+      <div id="delete-btn" class="delete__buttons-item delete__buttons-item--gray">Да</div>
+      <div id="close" class="delete__buttons-item">Нет</div>
+    </div>
+  </div>
+</div> -->
+
+<script src="~/plugins/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="~/plugins/selectize/js/selectize.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript"></script>
+<script src="https://api-maps.yandex.ru/2.1/?apikey=01d2e4d1-dbd2-422b-bbba-3046535e318c&lang=ru_RU" type="text/javascript"></script>
+<script src="~/js/ymapCustom.js?v=13"></script>
+<script src="~/js/script.js?v=10"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+@RenderSection("Scripts", required: false)
+
+</body>
+
+</html>

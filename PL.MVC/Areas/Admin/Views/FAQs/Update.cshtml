@@ -1,0 +1,64 @@
+﻿@using PL.MVC.Extensions
+@using PL.Entities.FAQ
+@model PL.Entities.FAQ.FAQ
+
+@{
+	var exists = Model != null;
+	ViewBag.Title = (exists ? "Редактирование" : "Создание") + " часто задаваемого вопроса";
+}
+
+<form asp-controller="@Url.GetController()" asp-action="Update" asp-antiforgery="true" method="post">
+	<div class="row">
+		<input type="hidden" asp-for="Id" />
+		<div class="col-md-4 col-sm-6">
+			<div class="form-group">
+				<label asp-for="Question">Вопрос</label>
+				<input type="text" asp-for="Question" class="form-control" />
+				<span asp-validation-for="Question" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-6">
+			<div class="form-group">
+				<label asp-for="Answer">Ответ</label>
+				<input type="text" asp-for="Answer" class="form-control" />
+				<span asp-validation-for="Answer" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-6">
+			<div class="form-group">
+				<label>Категория</label>
+				<input asp-for="CategoryId" id="categoryId" type="hidden" value="@Model?.Category?.Id" />
+                <input id="categoryTitle" type="hidden" value="@Model.Category?.Title" />
+                <select id="categorySelect"></select>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<button class="btn btn-outline-primary" type="submit">@(exists ? "Сохранить" : "Добавить")</button>
+			<a asp-controller="@Url.GetController()" asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+		</div>
+	</div>
+</form>
+
+@section Scripts {
+	<script src="~/js/admin/selectizeHelper.js"></script>
+	<script>		
+	$(document).ready(() => {
+	    initSelectize(
+	        'categorySelect',
+	        'categoryId',
+	        'id',
+	        'title',
+	        'title',
+	        'Начните печатать...',
+	        '/autocomplete/faqCategories', {
+	            id: $('#categoryId').val(),
+	            title: $('#categoryTitle').val()
+	        }, {
+	            limit: 10
+	        }
+	    );
+	});
+	</script>
+}

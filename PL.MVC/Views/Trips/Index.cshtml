@@ -1,0 +1,93 @@
+﻿@using System.Globalization
+@using PL.Services.Client.Models
+@model SearchResultViewModel<PL.Entities.Trip.Trip, TripsFilterModel>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    CultureInfo cultureInfo = new CultureInfo("ru-RU");
+    ulong? minimalTime = 0;
+    if (Model.Objects.Items != null)
+    {
+        minimalTime = Model.Objects.Items.Min(x => x.TravelTime);
+    }
+}
+
+<section class="content tripChoice">
+    <div class="content__container">
+        <div class="breadcrumbs">
+            <a href="@Url.Action("Index", "Home")" class="breadcrumbs__link">Главная</a>
+            <a href="" class="breadcrumbs__link">Рейсы</a>
+        </div>
+        <div class="heading">выбор рейса</div>
+        <input type="hidden" id="trips-get-api-mode" value="true" />
+        <partial name="_Filter" for="Filter" />
+
+        <div class="tripChoice__sort">
+            <div class="tripChoice__sort-text">Сортировка</div>
+            <select class="select1" name="" id="trip-sort-select">
+                <option selected="selected" value="DepartureTime.Asc">По времени отправления (возр.)</option>
+                <option value="DepartureTime.Desc">По времени отправления (убыв.)</option>
+                <option value="ArrivalTime.Asc">По времени прибытия (возр.)</option>
+                <option value="ArrivalTime.Desc">По времени прибытия (убыв.)</option>
+                <option value="Price.Asc">По цене (возр.)</option>
+                <option value="Price.Desc">По цене (убыв.)</option>
+            </select>
+        </div>
+        <div class="tripChoice__list" id="trip-choice-list">
+            @{
+                foreach (var trip in Model.Objects.Items)
+                {
+                    string depMonthName = cultureInfo.DateTimeFormat.GetMonthName(trip.DepartureTime.Month);
+                    string arrMonthName = cultureInfo.DateTimeFormat.GetMonthName(trip.ArrivalTime.Value.Month);
+                    string needClass = "tripChoice__list-item tripChoice__list-item";
+        if (trip.TripRoutePoints.Any(x => x.RoutePoint.Title == "Москва"))
+        {
+            needClass = "tripChoice__list-item tripChoice__list-item--moscow";
+        }
+        if (true)
+        {
+            needClass = "tripChoice__list-item tripChoice__list-item--firmal";
+        }
+        if (trip.TravelTime.Value == minimalTime)
+        {
+            needClass = "tripChoice__list-item tripChoice__list-item--fast";
+        }
+                    <div class="@needClass">
+                        <div class="tripChoice__wrapper">
+                            <div class="tripChoice__departure">
+                                <div class="tripChoice__top">
+                                    <div class="tripChoice__date">@(trip.DepartureTime.ToString("dd ") + depMonthName.ToLower())</div>
+                                    <div class="tripChoice__time">@trip.DepartureTime.TimeOfDay.ToString(@"hh\:mm")</div>
+                                </div>
+                                <div class="tripChoice__place">@trip.DepartureRoutePoint.Title</div>
+                            </div>
+                            <div class="tripChoice__arrival">
+                                <div class="tripChoice__top">
+                                    <div class="tripChoice__date">@(trip.ArrivalTime.Value.ToString("dd ") + arrMonthName.ToLower())</div>
+                                    <div class="tripChoice__time">@trip.ArrivalTime.Value.TimeOfDay.ToString(@"hh\:mm")</div>
+                                </div>
+                                <div class="tripChoice__place">@trip.ArrivalRoutePoint.Title</div>
+                            </div>
+                            <div class="tripChoice__options">
+                                <div class="tripChoice__options-left">
+                                    <div class="tripChoice__price">Цена</div>
+                                    <div class="tripChoice__priceValue">@trip.Price ₽</div>
+                                </div>
+                                <div class="tripChoice__options-right">
+                                    <div class="tripChoice__travelTime">Время в пути</div>
+                                    <div class="tripChoice__timeValue">@trip.TravelTimeSpan.GetValueOrDefault().Hours ч @trip.TravelTimeSpan.GetValueOrDefault().Minutes мин</div>
+                                </div>
+                            </div>
+                            <div class="tripChoice__confirm tripChoice__confirm">
+                                <div onclick="location.href='/trips/details?id=@trip.Id';" class="tripChoice__btn">Купить</div>
+                                <div class="tripChoice__enabled tripChoice__enabled--myTrip">Доступно @trip.FreeSeats мест</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>

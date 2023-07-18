@@ -1,0 +1,255 @@
+﻿@using PL.MVC.Extensions
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using Common.Enums
+@using PL.Entities.RoutePoint
+@model PL.Entities.TripRoute.TripRoute
+
+@{
+    var exists = Model != null;
+    ViewBag.Title = (exists ? "Редактирование" : "Создание") + " маршрута";
+    ViewBag.UseFileManager = true;
+    
+    if (Model != null)
+    {
+        Model.TripRoutePoints = Model?.TripRoutePoints?.OrderBy(r => r?.MinutesFromStart)?.ToList();
+    }
+
+}
+
+<form asp-controller="@Url.GetController()" enctype="multipart/form-data" asp-action="Update" asp-antiforgery="true" method="post">
+    <div class="row">
+        <input type="hidden" asp-for="Id" />
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <label asp-for="Title">Название</label>
+                <input type="text" asp-for="Title" value="@Model?.Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PopularDestination">Популярное направление?</label>
+                @if(Model?.PopularDestination??false)
+                {
+                    <input checked="checked" type="checkbox" asp-for="PopularDestination" class="form-control"/>
+                }
+                else
+                {
+                    <input type="checkbox" asp-for="PopularDestination" class="form-control"/>
+                }
+                <span asp-validation-for="PopularDestination" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PopularDestinatonDescription">Описание популярного направления</label>
+                <input type="text" asp-for="PopularDestinatonDescription" value="@Model?.PopularDestinatonDescription" class="form-control" />
+                <span asp-validation-for="PopularDestinatonDescription" class="text-danger"></span>
+            </div>
+            
+            <div class="col media">
+            	<div class="form-group">
+            		<label asp-for="PopularDestinationPicturePath">Картинка для карусели популярных направлений</label>
+            		<div style="background-image: url('@Url.GetImageUrl(@Model?.PopularDestinationPicture?.Path)');" class="media-thumbnail"></div>
+                    <div class="input-group">
+                        <input type="text" asp-for="PopularDestinationPicturePath" value="@Model?.PopularDestinationPicture?.Path" class="form-control file-image-url" />
+                        <span class="input-group-append">
+                            <a title="Обзор" class="btn btn-outline-secondary open-file-manager-button">...</a>
+                        </span>
+                    </div>
+            		<span asp-validation-for="PopularDestinationPicturePath" class="text-danger"></span>
+            	</div>
+            </div>
+            
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <div id="points-list">
+                    <h3>Точки маршрута</h3>
+                    <button class="btn btn-sm btn-outline-primary" onclick="addTripRoutePointBlock()" type="button" value="Добавить">Добавить</button>
+                    @for (var i = 0; i < Model?.TripRoutePoints.Count; i++)
+                    {
+                        var trp = Model.TripRoutePoints.ElementAt(i);
+                        <div id="point(@i)">
+                            <label>Точка</label>
+                            <select title="Toчка" name="TripRoutePoints[@i].RoutePointId">
+                                @foreach (RoutePoint rp in ViewBag.AllRoutePoints)
+                                {
+                                    //@TODO Убрать разрешение через if
+                                    if (trp.RoutePointId == rp.Id)
+                                    {
+                                        <option selected value='@rp.Id'>
+                                            @rp.Title (@rp.Address)
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value='@rp.Id'>
+                                            @rp.Title (@rp.Address)
+                                        </option>
+                                    }
+                                    // selected='@Html.Raw($"{(trp.RoutePointId == rp.Id ? "selected" : "false")}")'
+                                }
+                            </select>
+                            <label>Тип</label>
+                            <select name="TripRoutePoints[@i].Type" title="Тип">
+                                @foreach (RoutePointType e in Enum.GetValues(typeof(RoutePointType)))
+                                {
+                                    var type = e;
+                                    if (trp.Type == type)
+                                    {
+                                        <option selected value='@type.ToString()'>
+                                            @type
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value='@type.ToString()'>
+                                            @type
+                                        </option>
+                                    }
+                                }
+                            </select>
+                            <label>Минут от старта</label>
+                            <input name="TripRoutePoints[@i].MinutesFromStart" type="number" value="@trp.MinutesFromStart" />
+                            <label>Цена проезда точки</label>
+                                                        <input name="TripRoutePoints[@i].PriceForPoint" type="number" value="@trp.PriceForPoint" />
+                            <input name="TripRoutePoints[@i].Id" type="hidden" value="@trp.Id" />
+                            <button class="btn btn-sm btn-danger" type="button" onclick="removeTripRoutePointBlock('point(@i)')">Удалить</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <button class="btn btn-outline-primary" type="submit">@(exists ? "Сохранить" : "Добавить")</button>
+            <a asp-controller="@Url.GetController()" asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+        </div>
+    </div>
+</form>
+<div id="route-point-options" style="display:none">
+    @foreach (var rp in ViewBag.AllRoutePoints)
+    {
+        <option value="@rp.Id">@rp.Title (@rp.Address)</option>
+    }
+</div>
+<div id="route-point-type-options" style="display:none">
+    @foreach (RoutePointType e in Enum.GetValues(typeof(RoutePointType)))
+    {
+        var type = e;
+        <option value='@type.ToString()'>
+            @type
+        </option>
+    }
+</div>
+@section Scripts {
+    <script>
+        let pCount = @(Model?.TripRoutePoints.Count ?? 0);
+        function addTripRoutePointBlock() {
+            // get the container element
+            var container = document.getElementById("points-list");
+
+            // create a new block
+            var block = document.createElement("div");
+            block.id="point("+(pCount)+")";
+
+            // create the route point select element
+            var routePointSelect = document.createElement("select");
+            routePointSelect.title = "Точка";
+            routePointSelect.name = "TripRoutePoints[" + pCount + "].RoutePointId";
+            var rpsLabel = document.createElement("label");
+            rpsLabel.innerText=routePointSelect.title;
+          
+            
+
+            // get the option elements from the hidden container
+            var optionsContainer = document.getElementById("route-point-options");
+            routePointSelect.innerHTML = optionsContainer.innerHTML;
+
+            // add the select element to the block
+            block.appendChild(routePointSelect);
+
+            // create the type select element
+            var typeSelect = document.createElement("select");
+            typeSelect.name = "TripRoutePoints[" + pCount + "].Type";
+            typeSelect.title = "Тип";
+            var typeOptionsContainer = document.getElementById("route-point-type-options");
+            typeSelect.innerHTML = typeOptionsContainer.innerHTML;
+            var typeLabel = document.createElement("label");
+            typeLabel.innerText=typeSelect.title;
+            
+            var minutesInput = document.createElement("input");
+            minutesInput.type="number";
+            minutesInput.title="Минут от старта";
+            minutesInput.name = "TripRoutePoints["+ pCount +"].MinutesFromStart"
+            var minutesLabel = document.createElement("label");
+            minutesLabel.innerText=minutesInput.title;
+            
+            var priceInput = document.createElement("input");
+                        priceInput.type="number";
+                        priceInput.title="Цена за проезд точки";
+                        priceInput.name = "TripRoutePoints["+ pCount +"].PriceForPoint"
+                        var priceLabel = document.createElement("label");
+                        priceLabel.innerText=priceInput.title;
+          
+            // add the elements to the block
+            
+            block.appendChild(rpsLabel);
+            block.appendChild(routePointSelect);
+            block.appendChild(document.createElement("br"));
+            
+            block.appendChild(typeLabel);
+            block.appendChild(typeSelect); 
+            block.appendChild(document.createElement("br"));
+            
+            block.appendChild(minutesLabel);
+            block.appendChild(minutesInput);
+            block.appendChild(document.createElement("br"));
+            
+            block.appendChild(priceLabel);
+            block.appendChild(priceInput);
+            block.appendChild(document.createElement("br"));
+
+            // create the delete button
+            var deleteButton = document.createElement("button");
+            deleteButton.className = "btn btn-sm btn-danger";
+            deleteButton.type = "button";
+            deleteButton.innerHTML = "Удалить";
+            deleteButton.addEventListener('click', function (){ removeTripRoutePointBlock("point("+pCount+")")});
+
+            // add the delete button to the block
+            block.appendChild(document.createElement("br"));
+            block.appendChild(deleteButton);
+
+            // add the block to the container
+            container.appendChild(block);
+            block.appendChild(document.createElement("br"));
+            pCount++;
+            updDom();
+        }
+
+        function removeTripRoutePointBlock(id) {
+            // get the block element
+            var block = document.getElementById(id);
+
+            // remove the block from the container
+            block.parentNode.removeChild(block);
+            pCount--;
+            updDom();
+        }
+
+        function updDom() {
+            // get the HTML element that contains the Trip Route Point blocks
+            // var pointsList = document.getElementById("points-list");
+            //
+            // // get the updated HTML for the points list
+            // var pointsListHtml = pointsList.innerHTML;
+            //
+            // // update the HTML source code with the updated points list
+            // document.documentElement.innerHTML = document.documentElement.innerHTML.replace(pointsList.outerHTML, pointsListHtml);
+        }
+        
+        $(document).ready(function () {
+            window.pageUtils.bindDefaultFileManagerHandlers('.open-file-manager-button');
+        });
+    </script>
+}

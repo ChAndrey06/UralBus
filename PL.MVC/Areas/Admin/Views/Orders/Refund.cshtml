@@ -1,0 +1,57 @@
+﻿@using PL.MVC.Extensions
+@using Common.Enums
+@model PL.Entities.Order.Order
+
+@{
+    ViewBag.Title = "Возврат средств за заказ";
+}
+
+<form asp-controller="@Url.GetController()" asp-action="Refund" asp-antiforgery="true" method="post">
+    <div class="row"/>
+    <input type="hidden" asp-for="Id"/>
+    <input type="hidden" asp-for="TripId"/>
+    <input type="hidden" value="@Model?.Client?.PhoneNumber" asp-for="ClientPhoneNumber" />
+    <input type="hidden" asp-for="StartTripRoutePointId" />
+    <input type="hidden" asp-for="EndTripRoutePointId" />
+    <input type="hidden" asp-for="AdultsCount" />
+    <input type="hidden" asp-for="ChildrenCount" />
+    <input type="hidden" asp-for="CreationType" />
+    
+    <div class="col-md-4 col-sm-6">
+        <div class="form-group">
+            <label asp-for="ChildrenCount">Причина возврата</label>
+            <input type="text" asp-for="ReasonRefund" class="form-control"/>
+            <span asp-validation-for="ReasonRefund" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-6">
+        <div class="form-group">
+            <label asp-for="Status">Статус</label>
+            <select title="Тип" asp-for="Status" class="form-control">
+                @foreach (var dict in Common.Helpers.EnumHelper.GetAllEnumDescriptions<OrderStatus>())
+                {
+                    if (dict.Key == OrderStatus.Refund25)
+                    {
+                        <option selected value='@dict.Value'>
+                            @dict.Value
+                        </option>
+                    }
+                    else if (dict.Key.ToString().StartsWith("Refund"))
+                    {
+                        <option value='@dict.Value'>
+                            @dict.Value
+                        </option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+    	<div class="col-md-12 text-center">
+    		<button class="btn btn-outline-primary" type="submit">Сохранить</button>
+    		<a asp-controller="@Url.GetController()" asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+    	</div>
+    </div>
+</form>

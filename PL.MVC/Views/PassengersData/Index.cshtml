@@ -1,0 +1,47 @@
+﻿@using PL.Services.Admin.Models;
+@model SearchResultViewModel<PL.Entities.PassengerData.PassengerData, FilterModel>
+
+@{
+    ViewBag.Title = "Данные пассажиров";
+}
+
+<section class="content passengers">
+    <div class="content__container passengers__container">
+        <div class="breadcrumbs">
+            <a href="" class="breadcrumbs__link">Главная</a>
+            <a href="" class="breadcrumbs__link">Личный кабинет</a>
+            <a href="" class="breadcrumbs__link">Данные пассажиров</a>
+        </div>
+        <div class="heading">Данные пассажиров </div>
+        <div class="passengers__text">
+            Указанные данные необходимы для совершения бронирования и будут проверены при посадке в автобус.
+        </div>
+        <div class="passengers__cards">
+            @{
+                foreach (var passenger in Model.Objects.Items)
+                {
+                    <div class="passengers__cards-item">
+                        <div class="passengers__cards-content">
+                            <div class="passengers__cards-name">
+                                @passenger.FirstName @passenger.LastName @passenger.Patronymic
+                            </div>
+                            <div class="passengers__cards-date">
+                                @(passenger.BirthDate is null ? "" : passenger.BirthDate.Value.ToString("dd.MM.yyyy"));
+                            </div>
+                        </div>
+                        <div class="passengers__cards-buttons">
+                            <button class="passengers__cards-button">редактировать</button>
+                            <button class="passengers__cards-button passengers__cards-button--gray" onclick="location.href='@Url.Action("Delete", new { id = passenger.Id })'">удалить</button>
+                        </div>
+                    </div>
+                }
+            }
+
+            <div class="passengers__cards-item passengers__cards-item--last">
+                <div href="" class="passengers__cards-icon icon-profile"></div>
+                <button class="passengers__cards-button">добавить пассажира</button>
+            </div>
+        </div>
+        <button class="passengers__button">условия возврата</button>
+    </div>
+</section>

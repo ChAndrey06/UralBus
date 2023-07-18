@@ -1,0 +1,200 @@
+@using PL.MVC.Extensions
+@using Common.Enums
+@using Common.Configuration
+@model PL.Entities.Order.Order
+
+@{
+    var exists = Model != null;
+    ViewBag.Title = (exists ? "Редактирование" : "Создание") + " заказа";
+}
+
+<form asp-controller="@Url.GetController()" asp-action="Update" asp-antiforgery="true" method="post">
+    <div class="row"/>
+    <input type="hidden" asp-for="Id"/>
+    <div class="col-md-4 col-sm-6">
+        <div class="form-group">
+            <label asp-for="TripId">Рейс (id)</label>
+            <input id="route-id-input" type="text" value="@Model?.TripId" asp-for="TripId" class="form-control"/>
+            <span asp-validation-for="TripId" class="text-danger"></span>
+            <button id="btnLoadRoutePoints" type="button" class="btn btn-primary mt-2" onclick="loadRoutePoints()">Подгрузить точки маршрута</button>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="form-group">
+            <label asp-for="ClientPhoneNumber">Клиент (номер телефона)</label>
+            <input type="text" value="@Model?.Client?.User?.PhoneNumber" asp-for="ClientPhoneNumber" class="form-control"/>
+            <span asp-validation-for="ClientPhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <label asp-for="ClientPhoneNumber">Клиент (Фамилия)</label>
+                @if (Model.ClientId == Constants.DefaultClientId)
+                {
+                    <input type="text" value="@Model.ClientLastName" asp-for="ClientLastName" class="form-control" />
+                }
+                else
+                {
+                    <input readonly type="text" value="@Model.Client.User.LastName" asp-for="Client.User.LastName" class="form-control" />
+                }
+            </div>
+        </div>
+    
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <label asp-for="ClientPhoneNumber">Клиент (Имя)</label>
+                @if (Model.ClientId == Constants.DefaultClientId)
+                {
+                    <input type="text" value="@Model.ClientFirstName" asp-for="ClientFirstName" class="form-control" />
+                }
+                else
+                {
+                    <input readonly type="text" value="@Model.Client.User.FirstName" asp-for="Client.User.FirstName" class="form-control" />
+                }
+            </div>
+        </div>
+    
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <label asp-for="ClientPhoneNumber">Клиент (Отчество)</label>
+                @if (Model.ClientId == Constants.DefaultClientId)
+                {
+                    <input type="text" value="@Model.ClientPatronymic" asp-for="ClientPatronymic" class="form-control" />
+                }
+                else
+                {
+                    <input readonly type="text" value="@Model.Client.User.Patronymic" asp-for="Client.User.Patronymic" class="form-control" />
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 col-sm-6">
+        <div class="form-group">
+            <label asp-for="StartTripRoutePointId">Начальная точка маршрута</label>
+            <select id="start-route-point-select" asp-for="StartTripRoutePointId" class="form-control">
+                @foreach(var point in Model.Trip.TripRoutePoints)
+                {
+                    <option value="@point.Id">
+                        @point.RoutePoint?.Title
+                    </option>
+                }
+            </select>
+            <span asp-validation-for="StartTripRoutePointId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="form-group">
+            <label asp-for="EndTripRoutePointId">Конечная точка маршрута</label>
+            <select id="end-route-point-select" asp-for="EndTripRoutePointId" class="form-control">
+                @if (Model?.StartTripRoutePoint?.RoutePoint?.Title != null)
+                {
+                    <option value="@Model?.EndTripRoutePointId">
+                        @Model?.EndTripRoutePoint?.RoutePoint?.Title
+                    </option>
+                }
+            </select>
+            @* <input type="text" asp-for="EndTripRoutePointId" class="form-control"/> *@
+            <span asp-validation-for="EndTripRoutePointId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="form-group">
+            <label asp-for="AdultsCount">Количество взрослых</label>
+            <input type="number" value="@Model?.AdultsCount" asp-for="AdultsCount" class="form-control"/>
+            <span asp-validation-for="AdultsCount" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="form-group">
+            <label asp-for="ChildrenCount">Количество детей</label>
+            <input type="number" value="@Model?.ChildrenCount" asp-for="ChildrenCount" class="form-control"/>
+            <span asp-validation-for="ChildrenCount" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="form-group">
+            <label asp-for="Status">Статус</label>
+            <select title="Тип" asp-for="Status" class="form-control">
+                @foreach (var type in Common.Helpers.EnumHelper.GetAllEnumDescriptions<OrderStatus>())
+                {
+                    if ((Model?.StatusString.StartsWith("Refund") ?? false) && type.Key.ToString().StartsWith("Refund"))
+                    {
+                        if (type.Value == Model?.StatusString)
+                        {
+                            <option selected value='@type.Value'>
+                                @type.Value
+                            </option>
+                        }
+                        else
+                        {
+                            <option value='@type.Value'>
+                                @type.Value
+                            </option>
+                        }
+                    }
+                    if (!(Model?.StatusString.StartsWith("Refund") ?? false) && !type.Key.ToString().StartsWith("Refund"))
+                    {
+                        if (type.Value == Model?.StatusString)
+                        {
+                            <option selected value='@type.Value'>
+                                @type.Value
+                            </option>
+                        }
+                        else
+                        {
+                            <option value='@type.Value'>
+                                @type.Value
+                            </option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="form-group">
+            <label asp-for="CreationType">Тип создания заказа</label>
+            <select title="Тип" asp-for="CreationType" class="form-control">
+                @foreach (var type in Common.Helpers.EnumHelper.GetAllEnumDescriptions<OrderCreationType>())
+                {
+                    if (type.Value == Model?.CreationTypeString)
+                    {
+                        <option selected value='@type.Value'>
+                            @type.Value
+                        </option>
+                    }
+                    else
+                    {
+                        <option value='@type.Value'>
+                            @type.Value
+                        </option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    @if (Model?.StatusString?.StartsWith("Refund") ?? false)
+    {
+        <div class="col-md-4 col-sm-6">
+            <div class="form-group">
+                <label asp-for="ReasonRefund">Причина возврата</label>
+                <input type="text" value="@Model?.ReasonRefund" asp-for="ReasonRefund" class="form-control" row="10"/>
+                <span asp-validation-for="ReasonRefund" class="text-danger"></span>
+            </div>
+        </div>
+    }
+    <div class="row">
+    		<div class="col-md-12 text-center">
+    			<button class="btn btn-outline-primary" type="submit">@(exists ? "Сохранить" : "Добавить")</button>
+    			<a asp-controller="@Url.GetController()" asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+    		</div>
+    	</div>
+</form>
+       
+@section Scripts
+{
+}

@@ -1,0 +1,424 @@
+﻿@using PL.MVC.Areas.Admin.Models;
+@using PL.MVC.Extensions;
+@using System.Globalization;
+@model ScheduleModel
+
+@{
+	ViewBag.Title = "Календарь";
+}
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="card mb-3">
+			<div class="card-header" data-toggle="collapse" data-target="#filterBody" aria-expanded="true" aria-controls="filterBody">
+				Параметры поиска
+			</div>
+			<div id="filterBody" class="collapse show">
+				<div class="card-body">
+					<form asp-controller="@Url.GetController()" asp-action="Update" asp-antiforgery="true" method="post" enctype="multipart/form-data">
+						<div class="row">
+							@*<div class="col-md-6 form-group">
+								<label for="EndDate">По дату</label>
+								<input name="EndDate" type="date" id="EndDate" class="form-control" />
+							</div>*@
+							<div class="col-md-6 form-group">
+								<label for="EndDate">Маршрут</label>
+								<select asp-for="ChooseTripRouteId" name="ChooseTripRouteId" id="Route" class="form-control">
+									<option value="@Guid.Empty">Выберите маршрут</option>
+									@foreach(var item in Model.TripRoutes)
+									{
+										<option value="@item.Id">@item.Title - @item.Id</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 text-center">
+								<input type="submit" class="btn btn-outline-primary" value="Применить">
+								<a asp-action="Update" class="btn btn-outline-secondary">Сбросить</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="text-center mb-3">
+	@if (Model.ChooseTripRouteId != Guid.Empty)
+	{
+		<h2>Маршрут: @Model.TripRoutes.First(r => r.Id == @Model.ChooseTripRouteId).Title</h2>
+	}
+</div>
+
+@if (Model.ChooseTripRouteId != Guid.Empty)
+{
+	<div class="form-row font-weight-bold mb-2">
+		<span class="mr-3">
+			Продлить на:
+		</span>
+		<div class="form-check form-check-inline">
+			<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+			<label class="form-check-label" for="exampleRadios1">
+				неделю
+			</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+			<label class="form-check-label" for="exampleRadios2">
+				2 недели
+			</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
+			<label class="form-check-label" for="exampleRadios3">
+				месяц
+			</label>
+		</div>
+	</div>
+
+	<div id="calendar"></div>
+
+	<div class="modal fade" id="addTripTemplate" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Поездка</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="tripDraft">
+					<div class="form-group">
+						<label for="startTime">Начало поездки</label>
+						<input type="time" class="form-control" name="startTime" id="startTime" required>
+					</div>
+					<div class="form-group">
+						<label for="endTime">Окончание поездки</label>
+						<input type="time" class="form-control" name="endTime" id="endTime" required>
+					</div>
+					<div class="form-group">
+						<label for="carrierId">Перевозчик</label>
+						<select class="form-control" name="carrierId" id="carrierId">
+							<option value="-1">Выберите перевозчика</option>
+							<option value="1">Перевозчик 1</option>
+							<option value="2">Перевозчик 2</option>
+							<option value="3">Перевозчик 3</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="vehicleId">Транспорт</label>
+						<select class="form-control" name="vehicleId" id="vehicleId">
+							<option value="-1">Выберите транспорт</option>
+							<option value="1">Транспорт 1</option>
+							<option value="2">Транспорт 2</option>
+							<option value="3">Транспорт 3</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="driverId">Водитель</label>
+						<select class="form-control" name="driverId" id="driverId">
+							<option value="-1">Выберите водителя</option>
+							<option value="1">Водитель 1</option>
+							<option value="2">Водитель 2</option>
+							<option value="3">Водитель 3</option>
+						</select>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="tripDraftSubmit">Применить</button>
+			</div>
+			</div>
+		</div>
+	</div>
+}
+<style>
+	.calendar__event {
+		border: none;
+		padding: 5px;
+		text-align: center;
+		word-break: break-all;
+	}
+
+	.calendar__event .fc-event-main {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.calendar__slot-lane {
+		height: 40px !important;
+	}
+
+	.fc .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky > * {
+		top: 56px;
+	}
+</style>
+
+@section Scripts {
+	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+	<script>
+        $(document).ready(function () {
+			$('#tripDraftSubmit').on('click', function() {
+				$('#tripDraft').submit();
+			});
+
+
+			var events = [
+				@foreach(var item in Model.Trips)
+				{
+					
+					var end = ((DateTime)item.ArrivalTime).ToString("yyyy-MM-ddTHH:mm:ss");
+					var status = "";
+					
+					//@if (item.Transport.Driver is null)
+     //               {
+					//	status = "bg-danger";
+					//}
+     //               else
+					if (item.FreeSeats != 0)
+                    {
+                        status = "bg-success";
+                    }
+                    else
+                    {
+                        status = "bg-secondary";
+                    }
+                    <text>
+                    {
+                        start: new Date('@item.DepartureTime.ToString("yyyy-MM-ddTHH:mm:ss")'),
+                        end: new Date('@end'),
+                        classNames: 'calendar__event @status',
+                        editable: true,
+						id: '@item.Id',
+                        extendedProps: {
+                            driver: '@(item.Transport.Driver?.FullName ?? "не назначен")',
+							tripRouteId: '@item.TripRouteId',
+                        }
+                    },
+                    </text>
+                    
+                }
+            ];
+
+			var calendarEl = document.getElementById('calendar');
+			if (!calendarEl) return;
+
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				initialView: 'resourceTimelineTenDay',
+				locale: 'ru',
+				firstDay: 1,
+				initialDate: '@Model.StartDate.ToString("yyyy-MM-ddTHH:mm:ss")',
+				slotLabelFormat: {
+					hour: '2-digit',
+					minute: '2-digit',
+				},
+				slotDuration: '00:15:00',
+				slotMinTime: '06:00:00',
+				slotLaneClassNames: 'calendar__slot-lane',
+				height: 'auto',
+				headerToolbar: {
+					end: 'save',
+					start: '',
+				},
+				customButtons: {
+                    save: {
+                        text: 'Сохранить',
+                        click: function () {
+							var transformedEvents = calendar.getEvents().map(item => ({ ...item.toPlainObject(), triprouteid: item.extendedProps.triprouteid }));
+							var eventsJson = JSON.stringify(transformedEvents); // Convert events variable to JSON string
+                
+                            $.ajax({
+                                type: "POST",
+                                url: "/Admin/Schedule/UpdateCalendar",
+                                data: eventsJson, // Set the eventsJson as the request body
+                                contentType: "application/json", // Set the content type to JSON
+                                success: function (response) {
+									console.log("save");
+									location.reload();
+                                },
+                                error: function (error) {
+									console.log("error");
+                                }
+                            });
+                        }
+                    }
+                },
+				expandRows: true,
+				views: {
+					resourceTimelineTenDay: {
+						type: 'timeGridWeek',
+						allDaySlot: false,
+					}
+				},
+				events,
+				selectable: true,
+				eventContent: (arg) => {
+					var props = arg.event.extendedProps;
+					return { html: `
+						<div>${arg.timeText}</div>
+						<div>${props.driver}</div>
+					`};
+				}
+			});
+
+			calendar.render();
+
+			// todo: refactor it
+			// used to remove date from calendar header
+			$('.fc-col-header-cell-cushion').each(function() {
+				var $this = $(this);
+				$this.text($this.text().replace(/[\d\.]/g, ''));
+			})
+
+			let selectedDate;
+
+			function fillTripDraftForm(data) {
+				var form = $('#tripDraft')[0];
+				form.reset();
+
+				for (var key in data) {
+					if (form.elements[key]) {
+						form.elements[key].value = data[key];
+					}
+				}
+			}
+
+			function openTripDraftModal() {
+				$('#addTripTemplate').modal('show');
+			}
+
+			function closeTripDraftModal() {
+				$('#addTripTemplate').modal('hide');
+			}
+
+			calendar.on('dateClick', function(info) {
+				var data = {
+					startTime: info.date.toLocaleTimeString(),
+					endTime: info.date.toLocaleTimeString(),
+				};
+
+				selectedDate = new Date(info.date.getFullYear(), info.date.getMonth(), info.date.getDate());
+
+
+				fillTripDraftForm(data);
+				openTripDraftModal();
+			})
+
+			$('#tripDraft').on('submit', function(e) {
+				e.preventDefault();
+
+				var newEvent = {
+					start: new Date(selectedDate.getTime() + this.elements.startTime.valueAsNumber),
+					end: new Date(selectedDate.getTime() + this.elements.endTime.valueAsNumber),
+					extendedProps: {
+						driver: this.elements.driverId.value !== '-1' ? `Водитель ${this.elements.driverId.value}` : 'Не выбрано',
+					},
+					classNames: 'calendar__event bg-success',
+					editable: true,
+				}
+
+				calendar.addEvent(newEvent);
+
+				closeTripDraftModal();
+			})
+
+			var copyKey = false;
+			$(document).keydown(function (e) {
+				copyKey = e.altKey;
+			}).keyup(function () {
+				copyKey = false;
+			});
+
+			calendar.on('eventDragStart', function ({event}) {
+				if (!copyKey) return;
+				var newEvent = { ...event.toPlainObject(), id: undefined, editable: true }
+
+				setTimeout(function() {
+					calendar.addEvent(newEvent);
+				}, 0);
+			})
+
+			// var selectInfoBuffer;
+
+			// calendar.on('select', function(selectInfo) {
+			// 	selectInfoBuffer = selectInfo
+			// });
+
+			// function excludeTime(date) {
+			// 	var year = date.getFullYear();
+			// 	var month = date.getMonth();
+			// 	var day = date.getDate();
+
+			// 	return new Date(year, month, day).getTime();
+			// }
+
+			// function getEventPeriodFromDayStart(startDate, endDate) {
+			// 	var dayStart = excludeTime(startDate);
+
+			// 	return {
+			// 		start: startDate.getTime() - dayStart,
+			// 		end: endDate.getTime() - dayStart,
+			// 	};
+			// }
+
+			// var eventsBuffer = [];
+
+			// $(document).on('keydown', function(e) {
+			// 	if (!selectInfoBuffer) return;
+			// 	if (e.ctrlKey) {
+			// 		if (e.code === 'KeyC') {
+			// 			eventsBuffer = calendar.getEvents().filter(function (event) {
+			// 				return event.start.getTime() >= selectInfoBuffer.start.getTime() && event.end.getTime() <= selectInfoBuffer.end.getTime();
+			// 			});
+			// 		}
+
+			// 		if (e.code === 'KeyV') {
+			// 			if (eventsBuffer.length < 1) return;
+
+			// 			var selectedStartDay = excludeTime(selectInfoBuffer.start);
+
+			// 			eventsBuffer.sort(function(a, b) {
+			// 				return a.start.getTime() - b.start.getTime();
+			// 			});
+
+			// 			var eventsBufferStartDate = excludeTime(eventsBuffer[0].start);
+
+			// 			for (var event of eventsBuffer) {
+			// 				var eventPeriod = getEventPeriodFromDayStart(event.start, event.end);
+			// 				var offset = excludeTime(event.start) - eventsBufferStartDate;
+			// 				var {id, ...eventData} = event.toPlainObject();
+
+			// 				var newEvent = {
+			// 					...eventData,
+			// 					start: new Date(offset + selectedStartDay + eventPeriod.start),
+			// 					end: new Date(offset + selectedStartDay + eventPeriod.end),
+			// 					extendedProps: {
+			// 						...eventData.extendedProps,
+			// 						driver: 'Не назначено',
+			// 						seatsBusy: 0,
+			// 					},
+			// 					classNames: 'calendar__event bg-secondary',
+			// 					editable: true,
+			// 				}
+
+			// 				function isEventExist(event) {
+			// 					return event.start.getTime() === newEvent.start.getTime() && event.end.getTime() === newEvent.end.getTime();
+			// 				}
+
+			// 				var existEvents = calendar.getEvents();
+
+			// 				if (!existEvents.find(isEventExist)) {
+			// 					calendar.addEvent(newEvent);
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// })
+		});
+	</script>
+}

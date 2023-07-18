@@ -1,0 +1,73 @@
+﻿@model CreateOrderViewModel
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<section class="passengersValue">
+    <div class="content__container">
+        <div class="breadcrumbs">
+            <a href="" class="breadcrumbs__link">Главная</a>
+            <a href="" class="breadcrumbs__link">Рейсы</a>
+        </div>
+        <div class="heading">Челябинск — екатеринбург</div>
+        <div class="details__wrapper">
+            <div class="details__progress">
+                <div class="details__progress-item">
+                    <div class="details__progress-bubble">
+                        <div class="details__progress-number">1</div>
+                    </div>
+                    <div class="details__progress-text">Место посадки</div>
+                </div>
+                <div class="details__progress-item  details__progress-item--active">
+                    <div class="details__progress-bubble">
+                        <div class="details__progress-number">2</div>
+                    </div>
+                    <div class="details__progress-text">Кол-во пассажиров</div>
+                </div>
+                <div class="details__progress-item">
+                    <div class="details__progress-bubble">
+                        <div class="details__progress-number">3</div>
+                    </div>
+                    <div class="details__progress-text">Подтверждение данных</div>
+                </div>
+            </div>
+            <div class="details__back">
+                <div class="details__back-icon icon-Frame-18"></div>
+                <button onclick="history.back()" class="details__back-text">Вернуться назад </button>
+            </div>
+        </div>
+        <form asp-action="Confirm" asp-antiforgery="false" method="post" class="passengersValue__card">
+            <input type="hidden" name="TripId" value="@Model.TripId" />
+            <input type="hidden" name="StartPointId" value="@Model.StartPointId" />
+            <input type="hidden" name="EndPointId" value="@Model.EndPointId" />
+            <div class="passengersValue__title">Выберите число пассажиров</div>
+            <div class="passengersValue__options">
+                <div class="passengersValue__options-item">
+                    <div class="passengersValue__options-text">Взрослый:</div>
+                    <div class="passengersValue__quantity">
+                        <div class="passengersValue__quantity-minus" id="1"><span>-</span></div>
+                        <div class="passengersValue__quantity-input">
+                            <input asp-for="AdultsCount" type="number" id="" step="any" value="1" placeholder="1" data-id="1" class="passengersValue__quantity-value">
+                        </div>
+                        <div class="passengersValue__quantity-plus" id="1"><span>+</span></div>
+                    </div>
+                </div>
+                <div class="passengersValue__options-item">
+                    <div class="passengersValue__options-text">Детский (до 11 лет):</div>
+                    <div class="passengersValue__quantity">
+                        <div class="passengersValue__quantity-minus" id="2"><span>-</span></div>
+                        <div class="passengersValue__quantity-input">
+                            <input asp-for="ChildrenCount" type="number" id="" step="any" value="0" placeholder="0" data-id="2" class="passengersValue__quantity-value">
+                        </div>
+                        <div class="passengersValue__quantity-plus" id="2"><span>+</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="passengersValue__warning">Перевоз животных запрещен</div>
+            <button class="passengersValue__btn">сохранить и продолжить</button>
+        </form>
+    </div>
+</section>

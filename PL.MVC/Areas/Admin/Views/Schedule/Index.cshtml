@@ -1,0 +1,161 @@
+﻿@using PL.MVC.Areas.Admin.Models;
+@using PL.MVC.Extensions;
+@model ScheduleModel
+
+@{
+    ViewBag.Title = "Расписание";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-3">
+            <div class="card-header" data-toggle="collapse" data-target="#filterBody" aria-expanded="true" aria-controls="filterBody">
+                Параметры поиска
+            </div>
+            <div id="filterBody" class="collapse show">
+                <div class="card-body">
+                    <form asp-controller="@Url.GetController()" asp-action="Index" asp-antiforgery="true" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="StartDate">С даты</label>
+                                <input asp-for="StartDate" name="StartDate" type="date" id="StartDate" class="form-control" />
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="EndDate">По дату</label>
+                                <input asp-for="EndDate" name="EndDate" type="date" id="EndDate" class="form-control" />
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="EndDate">Маршрут</label>
+                                <select asp-for="ChooseTripRouteId" name="ChooseTripRouteId" id="Route" class="form-control">
+                                    <option value="@Guid.Empty">Все маршруты</option>
+                                    @foreach (var item in Model.TripRoutes)
+                                    {
+                                        <option value="@item.Id">@item.Title - @item.Id</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <input type="submit" class="btn btn-outline-primary" value="Применить">
+                                <a asp-action="Index" class="btn btn-outline-secondary">Сбросить</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mb-3">
+    @if (Model.ChooseTripRouteId == Guid.Empty)
+    {
+        <h2>Все маршруты</h2>
+    }
+    else
+    {
+        <h2>Маршрут: @Model.TripRoutes.First(r => r.Id == @Model.ChooseTripRouteId).Title</h2>
+    }
+</div>
+
+<div class="text-center mb-3">
+    <h2>@Model.StartDate.Date - @Model.EndDate.Date</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-striped ">
+
+                
+                <tr>                    
+                    @foreach(var item in Model.datesBetween)
+                    {
+                        <th class="text-center text-nowrap">
+                            <div>
+                                @item.Date.ToString("dd.MM.yyyy")
+                            </div>
+                        </th>                       
+                    }                    
+                </tr>
+
+                <tr>
+                    @foreach(var item in Model.datesBetween)
+                    {
+                            <td class="text-center">
+                                @foreach (var trip in item.Trips)
+                                {
+                                    @if (trip.Transport.Driver is null)
+                                    {
+                                        <div class="bg-danger text-white p-2 " style="width: 200px;">
+                                            <div>
+                                                @trip.DepartureTime - @trip.DepartureTime
+                                            </div>
+                                            <div>
+                                                @(trip.Transport.Driver?.FullName ?? "не назначен")
+                                            </div>
+                                            <div>
+                                                @(trip.Transport.Seats - trip.FreeSeats)/@trip.Transport.Seats
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (trip.FreeSeats != 0)
+                                    {
+                                        <div class="bg-success text-white p-2 " style="width: 200px;">
+                                            <div>
+                                                @trip.DepartureTime - @trip.DepartureTime
+                                            </div>
+                                            <div>
+                                                @(trip.Transport.Driver?.FullName ?? "не назначен")
+                                            </div>
+                                            <div>
+                                                @(trip.Transport.Seats - trip.FreeSeats)/@trip.Transport.Seats
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                    <div class="bg-secondary text-white p-2 " style="width: 200px;">
+                                            <div>
+                                                @trip.DepartureTime - @trip.DepartureTime
+                                            </div>
+                                            <div>
+                                                @(trip.Transport.Driver?.FullName ?? "не назначен")
+                                            </div>
+                                            <div>
+                                                @(trip.Transport.Seats - trip.FreeSeats)/@trip.Transport.Seats
+                                            </div>
+                                        </div>
+                                    }
+
+                        }
+
+                                @if (item.Trips.Count == 0)
+                                {
+                                    <div>
+                                        <div>
+                                        </div>
+                                        <div>
+                                        </div>
+                                        <div>
+                                        </div>
+                                    </div>
+                                }
+                            </td>
+
+                            
+                    }
+
+                </tr>
+                
+
+                
+
+
+
+                
+            </table>
+        </div>
+    </div>
+</div>

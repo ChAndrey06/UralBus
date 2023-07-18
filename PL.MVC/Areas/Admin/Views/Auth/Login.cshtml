@@ -1,0 +1,34 @@
+﻿@model PL.MVC.Models.Auth.LoginViewModel
+@using PL.MVC.Extensions
+
+@{
+	ViewBag.Title = "Вход в админку";
+}
+
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="Login" asp-antiforgery="true" method="post">
+			<div class="form-group">
+				<label asp-for="Login">Логин</label>
+				<input type="text" asp-for="Login" class="form-control" />
+				<span asp-validation-for="Login" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Password">Пароль</label>
+				<input type="password" asp-for="Password" class="form-control" />
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+			<div class="form-group">
+				<label asp-for="RememberMe">Запомнить меня</label>
+				<input type="checkbox" asp-for="RememberMe" value="true" />
+				<span asp-validation-for="RememberMe" class="text-danger"></span>
+			</div>
+			<div class="row">
+				<div class="col-md-6 mx-auto">
+					<button class="btn btn-outline-primary btn-block" type="submit">Войти</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

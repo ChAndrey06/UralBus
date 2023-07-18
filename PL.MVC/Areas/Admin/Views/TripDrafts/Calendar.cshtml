@@ -1,0 +1,460 @@
+﻿﻿@using PL.MVC.Extensions
+@using PL.Services.Admin.Models
+@model PL.MVC.Areas.Admin.Models.CalendarModel
+
+@{
+	ViewBag.Title = "Календарь";
+}
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="card mb-3">
+			<div class="card-header" data-toggle="collapse" data-target="#filterBody" aria-expanded="true" aria-controls="filterBody">
+				Параметры поиска
+			</div>
+			<div id="filterBody" class="collapse show">
+				<div class="card-body">
+					<form asp-controller="@Url.GetController()" asp-action="Calendar" asp-antiforgery="true" method="post" enctype="multipart/form-data">
+						<div class="row">
+							<div class="col-md-6 form-group">
+								<label for="TripRouteId">Маршрут</label>
+								<select asp-for="Filter.TripRouteId" name="TripRouteId" id="TripRouteId" class="form-control">
+									<option value="@Guid.Empty">Выберите маршрут</option>
+									@foreach(var item in Model.TripRoutes.Items)
+									{
+										<option value="@item.Id">@item.Title - @item.Id</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 text-center">
+								<input type="submit" class="btn btn-outline-primary" value="Применить">
+								<a asp-action="Calendar" class="btn btn-outline-secondary">Сбросить</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@{
+	var currentTripRouteMs = 0;
+}
+
+@if (Model.Filter.TripRouteId is not null)
+{
+	// todo: вынести в контроллер
+	var currentTripRoute = Model.TripRoutes?.Items?.First(r => r.Id == @Model.Filter.TripRouteId);
+	currentTripRouteMs = currentTripRoute.TripRoutePoints.Sum(routePoint => routePoint.MinutesFromStart * 60 * 1000);
+
+	<div class="text-center mb-3">
+		<h2>Маршрут: @currentTripRoute.Title</h2>
+	</div>
+	<div class="form-row font-weight-bold mb-2">
+		<span class="mr-3">
+			Продлить на:
+		</span>
+		<div class="form-check form-check-inline">
+			<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+			<label class="form-check-label" for="exampleRadios1">
+				неделю
+			</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+			<label class="form-check-label" for="exampleRadios2">
+				2 недели
+			</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
+			<label class="form-check-label" for="exampleRadios3">
+				месяц
+			</label>
+		</div>
+	</div>
+
+	<div id="calendar"></div>
+
+	<div class="modal fade" id="addTripTemplate" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Поездка</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="tripDraft">
+					<div class="form-group">
+						<label for="startTime">Начало поездки</label>
+						<input type="time" class="form-control" name="startTime" id="startTime" required>
+					</div>
+					<div class="form-group">
+						<label>Перевозчик</label>
+						<input id="carrierId" type="hidden" />
+						<input id="carrierTitle" type="hidden" />
+						<select id="carrierSelect"></select>
+					</div>
+					<div class="form-group">
+						<label>Транспорт</label>
+						<input id="transportId" type="hidden" />
+						<input id="transportTitle" type="hidden" />
+						<select id="transportSelect"></select>
+					</div>
+					<div class="form-group">
+						<label>Водитель</label>
+						<input id="driverId" type="hidden" />
+						<input id="driverName" name="driverName" type="hidden" />
+						<select id="driverSelect"></select>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" style="display: none" id="deleteDraft">Удалить</button>
+				<button type="button" class="btn btn-primary" id="tripDraftSubmit">Применить</button>
+			</div>
+			</div>
+		</div>
+	</div>
+}
+<style>
+	.calendar__event {
+		border: none;
+		padding: 5px;
+		text-align: center;
+	}
+
+	.calendar__event .fc-event-main {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.calendar__slot-lane {
+		height: 40px !important;
+	}
+
+	.fc .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky > * {
+		top: 56px;
+	}
+</style>
+
+@section Scripts {
+	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+	<script src="~/js/admin/selectizeHelper.js"></script>
+	<script charset="utf-8">
+		
+        $(document).ready(function () {
+			$carrierSelect = initSelectize(
+				'carrierSelect',
+				'carrierId',
+				'id',
+				'title',
+				'title',
+				'Начните печатать...',
+				'/autocomplete/kontragents', {
+				id: $('#carrierId').val(),
+				title: $('#carrierTitle').val()
+			}, {
+				discriminator: 'carrier',
+				limit: 10
+			}
+			)[0].selectize;
+			$transportSelect = initSelectize(
+				'transportSelect',
+				'transportId',
+				'id',
+				'title',
+				'title',
+				'Начните печатать...',
+				'/autocomplete/transports', {
+				id: $('#transportId').val(),
+				title: $('#transportTitle').val()
+			}, {
+				limit: 10
+			}
+			)[0].selectize;
+			$driverSelect = initSelectize(
+				'driverSelect',
+				'driverId',
+				'id',
+				'fullName',
+				'fullName',
+				'Начните печатать...',
+				'/autocomplete/drivers', {
+				id: $('#driverId').val(),
+				fullName: $('#driverName').val()
+			}, {
+				limit: 10
+			}
+			)[0].selectize;
+			
+			var selectedDate;
+			var selectedEvent;
+
+			$('#tripDraftSubmit').on('click', function() {
+				$('#tripDraft').submit();
+			});
+			
+			$('#deleteDraft').on('click', function() {
+				if (selectedEvent) {
+					selectedEvent.remove();
+					closeTripDraftModal();
+					if (selectedEvent.id) {
+						$.ajax({
+							type: "POST",
+							url: "/api/drafts/delete",
+							data: JSON.stringify(selectedEvent.id),
+							contentType: "application/json",
+							error: function (error) {
+								console.log("error", error);
+							}
+						});
+					}
+				}
+			});
+
+
+			var events = [
+				@foreach (var item in Model.TripDrafts.Items)
+				{
+					<text>
+                     {
+                         start: new Date(new Date('12/29/1969 @item.StartTimeOfDay').getTime() + @((int)item.StartDayOfWeek * 24 * 60 * 60 * 1000)),
+                         end: new Date(new Date('12/29/1969 @item.StartTimeOfDay').getTime() + @((int)item.StartDayOfWeek * 24 * 60 * 60 * 1000 + currentTripRouteMs)),
+                         classNames: 'calendar__event bg-success',
+                         editable: true,
+						 id: '@item.Id',
+                         extendedProps: {
+						 	tripRouteId: 	'@item.TripRouteId',
+							transportName: 	'@Html.Raw(item.Transport is not null ? item.Transport?.Title : "не назначен")',
+							transportId: 	'@item.Transport?.Id',
+							carrierName: 	'@Html.Raw(item.Carrier is not null ? item.Carrier?.Title : "не назначен")',
+							carrierId: 		'@item.Carrier?.Id',
+                            driverName: 	'@Html.Raw(item.Driver is not null ? item.Driver?.FullName : "не назначен")',
+							driverId: 		'@item.Driver?.Id',
+                         }
+                     },
+                     </text>
+
+
+				}
+            ];
+
+			var calendarEl = document.getElementById('calendar');
+			if (!calendarEl) return;
+
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				initialView: 'resourceTimelineTenDay',
+				locale: 'ru',
+				firstDay: 1,
+				initialDate: new Date('12/29/1969'),
+				slotLabelFormat: {
+					hour: '2-digit',
+					minute: '2-digit',
+				},
+				slotDuration: '00:15:00',
+				slotMinTime: '06:00:00',
+				slotLaneClassNames: 'calendar__slot-lane',
+				height: 'auto',
+				headerToolbar: {
+					end: 'save',
+					start: '',
+				},
+				customButtons: {
+                    save: {
+                        text: 'Сохранить',
+                        click: function () {
+							var transformedEvents = calendar.getEvents().map(item => {
+								var props = item.extendedProps;
+								return {
+									id: item.id || undefined,
+									start: {
+										dayOfTheWeek: item.start.getDay() - 1,
+										timeOfDay: item.start.toLocaleTimeString(false, { hour12: false }),
+									},
+									triprouteid: props.tripRouteId,
+									driverId: props.driverId || undefined,
+									carrierId: props.carrierId || undefined,
+									transportId: props.transportId || undefined,
+								}});
+							var dataJson = JSON.stringify(transformedEvents); // Convert events variable to JSON string
+                
+                            $.ajax({
+                                type: "POST",
+                                url: "/api/drafts/update",
+                                data: dataJson, // Set the eventsJson as the request body
+                                contentType: "application/json", // Set the content type to JSON
+                                success: function (response) {
+									location.reload();
+                                },
+                                error: function (error) {
+									console.log("error", error);
+                                }
+                            });
+                        }
+                    }
+                },
+				expandRows: true,
+				views: {
+					resourceTimelineTenDay: {
+						type: 'timeGridWeek',
+						allDaySlot: false,
+					}
+				},
+				events,
+				selectable: true,
+				eventContent: (arg) => {
+					var props = arg.event.extendedProps;
+					return { html: `
+						<div>${arg.timeText}</div>
+						<div>Водитель: ${props.driverName !== '' ? props.driverName : 'не назначен'}</div>
+					`};
+				}
+			});
+
+			calendar.render();
+
+			// used to remove date from calendar header
+			$('.fc-col-header-cell-cushion').each(function() {
+				var $this = $(this);
+				$this.text($this.text().replace(/[\d.]/g, ''));
+			})
+
+			function fillTripDraftForm(data) {
+				var form = $('#tripDraft')[0];
+				
+				$carrierSelect.clearOptions();
+				$transportSelect.clearOptions();
+				$driverSelect.clearOptions();
+				
+				form.reset();
+
+				for (var key in data) {
+					if (form.elements[key]) {
+						form.elements[key].value = data[key];
+					}
+				}
+			}
+
+			function openTripDraftModal() {
+				$('#addTripTemplate').modal('show');
+			}
+
+			function closeTripDraftModal() {
+				$('#addTripTemplate').modal('hide');
+			}
+
+			calendar.on('dateClick', function(info) {
+				selectedEvent = undefined;
+				$('#deleteDraft').hide();
+				var data = {
+					startTime: info.date.toLocaleTimeString(false, { hour12: false }),
+				};
+
+				selectedDate = new Date(info.date.getFullYear(), info.date.getMonth(), info.date.getDate());
+
+				fillTripDraftForm(data);
+				openTripDraftModal();
+			})
+
+			calendar.on('eventClick', function (info) {
+				selectedEvent = info.event;
+				$('#deleteDraft').show();
+				var data = {
+					startTime: info.event.start.toLocaleTimeString(false, { hour12: false }),
+				};
+				
+				fillTripDraftForm(data);
+
+				$driverSelect.addOption({
+					id: info.event.extendedProps.driverId,
+					fullName: info.event.extendedProps.driverName,
+				});
+				$driverSelect.setValue(info.event.extendedProps.driverId);
+				
+				$carrierSelect.addOption({
+					id: info.event.extendedProps.carrierId,
+					title: info.event.extendedProps.carrierName,
+				});
+				$carrierSelect.setValue(info.event.extendedProps.carrierId)
+				
+				$transportSelect.addOption({
+					id: info.event.extendedProps.transportId,
+					title: info.event.extendedProps.transportName,
+				});
+				$transportSelect.setValue(info.event.extendedProps.transportId)
+			
+				openTripDraftModal();
+			})
+
+			$('#tripDraft').on('submit', function(e) {
+				e.preventDefault();
+				
+				var driverId =  this.elements.driverId.value;
+				var driverName = driverId !== '' ? $(`[data-value=${driverId}]`).eq(0).text() : 'не назначен';
+				var carrierId = this.elements.carrierId.value;
+				var carrierName = carrierId !== '' ? $(`[data-value=${carrierId}]`).eq(0).text() : 'не назначен';
+				var transportId = this.elements.transportId.value;
+				var transportName = transportId !== '' ? $(`[data-value=${transportId}]`).eq(0).text() : 'не назначен';
+
+				if (selectedEvent) {
+					selectedEvent.setExtendedProp('driverName', driverName);
+					selectedEvent.setExtendedProp('driverId', driverId);
+					selectedEvent.setExtendedProp('carrierName', carrierName);
+					selectedEvent.setExtendedProp('carrierId', carrierId);
+					selectedEvent.setExtendedProp('transportName', transportName);
+					selectedEvent.setExtendedProp('transportId', transportId);
+					
+					var start = selectedEvent.start;
+					var newStart = new Date(`${start.getFullYear()}/${start.getMonth() + 1}/${start.getDate()} ${this.elements.startTime.value}`);
+					selectedEvent.setDates(
+							newStart,
+							new Date(newStart.getTime() + @currentTripRouteMs),
+							);
+				} else {
+					var newEvent = {
+						start: new Date(selectedDate.getTime() + this.elements.startTime.valueAsNumber),
+						end: new Date(selectedDate.getTime() + this.elements.startTime.valueAsNumber + @currentTripRouteMs),
+						extendedProps: {
+							tripRouteId: '@Model.Filter.TripRouteId',
+							driverName,
+							driverId,
+							carrierName,
+							carrierId,
+							transportName,
+							transportId,
+						},
+						classNames: 'calendar__event bg-success',
+						editable: true,
+					}
+	
+					calendar.addEvent(newEvent);
+				}
+				
+				closeTripDraftModal();
+			})
+
+			var copyKey = false;
+			$(document).keydown(function (e) {
+				copyKey = e.altKey;
+			}).keyup(function () {
+				copyKey = false;
+			});
+
+			calendar.on('eventDragStart', function ({event}) {
+				if (!copyKey) return;
+				var newEvent = { ...event.toPlainObject(), id: '', editable: true }
+
+				setTimeout(function() {
+					calendar.addEvent(newEvent);
+				}, 0);
+			})
+		});
+	</script>
+}

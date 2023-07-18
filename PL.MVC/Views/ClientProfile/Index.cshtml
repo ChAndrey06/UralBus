@@ -1,0 +1,113 @@
+﻿@using PL.MVC.Extensions
+@using Common.Enums;
+@model PL.Entities.User.User
+
+<section class="content myData">
+    <div class="content__container">
+        <div class="breadcrumbs">
+            <a href="" class="breadcrumbs__link">Главная</a>
+            <a href="" class="breadcrumbs__link">Личный кабинет</a>
+            <a href="" class="breadcrumbs__link">Мои данные</a>
+        </div>
+        <div class="heading">мои данные</div>
+        <div class="myData__text">
+            Указанные данные необходимы для совершения бронирования и будут проверены при посадке в автобус.
+        </div>
+
+        <form asp-controller="@Url.GetController()" asp-action="Update" asp-antiforgery="true" method="post">
+            <div class="myData__inputs">
+                <input asp-for="FirstName" value="@Model.FirstName" type="text" class="myData__inputs-item" placeholder="Имя">
+                <input asp-for="LastName" value="@Model.LastName" type="text" class="myData__inputs-item" placeholder="Фамилия">
+                <input asp-for="Patronymic" value="@Model.Patronymic" type="text" class="myData__inputs-item" placeholder="Отчество">
+                <input asp-for="BirthDateString" value="@Model.BirthDateString" type="text" class="myData__inputs-item" placeholder="Дата рождения" id="date">
+
+                <div class="myData__inputs-radio">
+                    <div class="myData__radio-text">Пол</div>
+                    @{
+                        if (Model.Sex == Sex.Male.ToString())
+                        {
+                            <input class="myData__radio-item" checked type="radio" name="Sex" id="male" value="Male">
+                        }
+                        else
+                        {
+                            <input class="myData__radio-item" type="radio" name="Sex" id="male" value="Male">
+                        }
+                    }
+                    <label class="myData__radio-label" for="male">М</label>
+                    @{
+                        if (Model.Sex == Sex.Female.ToString())
+                        {
+                            <input class="myData__radio-item" checked type="radio" name="Sex" id="female" value="Female">
+                        }
+                        else
+                        {
+                            <input class="myData__radio-item" type="radio" name="Sex" id="female" value="Female">
+                        }
+                    }
+                    <label class="myData__radio-label" for="female">Ж</label>
+                </div>
+
+                <select asp-for="DocumentType" class="select1 myData__select" id="document">
+                    @{
+                        if (Model.ClientIdentity?.IdentificationDocumentType.GetValueOrDefault() == IdentificationDocumentType.Passport)
+                        {
+                            <option selected value="0">Паспорт РФ</option>
+                        }
+                        else
+                        {
+                            <option value="0">Паспорт РФ</option>
+                        }
+
+                        if (Model.ClientIdentity?.IdentificationDocumentType.GetValueOrDefault() == IdentificationDocumentType.InternationalPassport)
+                        {
+                            <option selected value="2">Загран. Паспорт</option>
+                        }
+                        else
+                        {
+                            <option value="2">Загран. Паспорт</option>
+                        }
+                    }
+                </select>
+                <input asp-for="DocumentNumber" value="@Model.ClientIdentity?.IdentificationDocumentNumber" type="text" class="myData__inputs-item" placeholder="номер документа">
+            </div>
+            <div class="myData__title">
+                Моя информация
+            </div>
+            <div class="myData__text">
+                Указывайте корректные e-mail и номер телефона, т.к. они необходимы для идентификации пользователя, получения билета, возможности авторизации в ЛК и возможности вернуть билет.
+            </div>
+            <div class="myData__inputs myData__inputs-bottom">
+                <input asp-for="Email" value="@Model.Email" type="email" class="myData__inputs-item" placeholder="example@gmail.com">
+                <input asp-for="PhoneNumber" value="@Model.PhoneNumber" type="tel" id="tel" class="myData__inputs-item" placeholder="+7(999)999-99-99">
+            </div>
+            
+            <div class="myData__inputs-checkbox">
+                <input class="myData__checkbox" name="SendAdvertisements" value="@Model.ClientIdentity?.SendAdvertisements.ToString()" type="hidden" id="check">
+                @{
+                    if (Model.ClientIdentity?.SendAdvertisements == true)
+                    {
+                        <input class="myData__checkbox" checked type="checkbox" id="SendAdvertisements">
+                    }
+                    else
+                    {
+                        <input class="myData__checkbox" type="checkbox" id="SendAdvertisements">
+                    }
+                }
+                <label asp-for="SendAdvertisements">Оповещать меня о новостях и проходящих акциях</label>
+            </div>
+            
+            <div class="myData__buttons">
+                <button class="myData__buttons-item myData__buttons-item--gray">подтвердить</button>
+                <button class="myData__buttons-item">сохранить</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <script>		
+	    document.getElementById('SendAdvertisements').onchange = () => {
+            $('#check').val($('#SendAdvertisements')[0].checked);
+        };
+	</script>
+}

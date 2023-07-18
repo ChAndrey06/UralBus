@@ -1,0 +1,90 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="Areas\Admin\Data\**" />
+      <Compile Remove="Areas\Client\**" />
+      <Compile Remove="Enums\**" />
+      <Compile Remove="Services\UserService\**" />
+      <Content Remove="Areas\Admin\Data\**" />
+      <Content Remove="Areas\Client\**" />
+      <Content Remove="Enums\**" />
+      <Content Remove="Services\UserService\**" />
+      <EmbeddedResource Remove="Areas\Admin\Data\**" />
+      <EmbeddedResource Remove="Areas\Client\**" />
+      <EmbeddedResource Remove="Enums\**" />
+      <EmbeddedResource Remove="Services\UserService\**" />
+      <None Remove="Areas\Admin\Data\**" />
+      <None Remove="Areas\Client\**" />
+      <None Remove="Enums\**" />
+      <None Remove="Services\UserService\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DependencyInjections\DependencyInjections.csproj" />
+      <ProjectReference Include="..\PL.Entities\PL.Entities.csproj" />
+      <ProjectReference Include="..\PL.Mappings\PL.Mappings.csproj" />
+      <ProjectReference Include="..\PL.Services.Interfaces\PL.Services.Interfaces.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\fonts\icon\icomoon.svg" />
+      <None Include="wwwroot\fonts\SFProDisplay-Semibold.woff2" />
+      <None Include="wwwroot\img\icon\cart.svg" />
+      <None Include="wwwroot\img\icon\Check.svg" />
+      <None Include="wwwroot\img\icon\favorite.svg" />
+      <None Include="wwwroot\img\icon\Menu.svg" />
+      <None Include="wwwroot\img\icon\Odnoklassniki.svg" />
+      <None Include="wwwroot\img\icon\Phone.svg" />
+      <None Include="wwwroot\img\icon\profile.svg" />
+      <None Include="wwwroot\img\icon\review.svg" />
+      <None Include="wwwroot\img\icon\search.svg" />
+      <None Include="wwwroot\img\icon\star.svg" />
+      <None Include="wwwroot\img\icon\Subtract.svg" />
+      <None Include="wwwroot\img\icon\Telegram.svg" />
+      <None Include="wwwroot\img\icon\trash.svg" />
+      <None Include="wwwroot\img\icon\Union.svg" />
+      <None Include="wwwroot\img\icon\Vk.svg" />
+      <None Include="wwwroot\img\icon\whatsapp.svg" />
+      <None Include="wwwroot\img\icon\Youtube.svg" />
+      <None Include="wwwroot\img\picture\caution %282%29 1.svg" />
+      <None Include="wwwroot\img\picture\Ellipse 23.svg" />
+      <None Include="wwwroot\img\picture\Group 193.svg" />
+      <None Include="wwwroot\img\picture\spaceapp.svg" />
+      <None Include="wwwroot\img\picture\UralBus3 1.svg" />
+      <None Include="wwwroot\img\picture\UralBus3 2.svg" />
+      <None Include="wwwroot\img\picture\UralBus3 21.svg" />
+      <None Include="wwwroot\img\picture\Vector %2815%29.svg" />
+      <None Include="wwwroot\lib\selectize\js\selectize.js" />
+      <None Include="wwwroot\lib\swiper\js\swiper.js" />
+      <None Include="wwwroot\plugins\jquery-3.6.0.min.js" />
+      <None Include="wwwroot\plugins\selectize\js\selectize.js" />
+      <None Include="wwwroot\plugins\swiper\js\swiper.js" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\Uploads\BinancePayQR.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Areas\Admin\Views\TripDrafts\Index.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\TripDrafts\Update.cshtml" />
+    </ItemGroup>
+
+</Project>

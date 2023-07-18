@@ -1,0 +1,113 @@
+﻿@using PL.Services.Client.Models;
+@using System.Globalization
+@model SearchResultViewModel<PL.Entities.Order.Order, MyTripsFilterModel>
+
+@{
+    ViewData["Title"] = "Мои поездки";
+    CultureInfo cultureInfo = CultureInfo.CreateSpecificCulture("ru-RU");
+}
+
+<section class="content tripChoice">
+    <div class="content__container">
+        <div class="breadcrumbs">
+            <a href="" class="breadcrumbs__link">Главная</a>
+            <a href="" class="breadcrumbs__link">Личный кабинет</a>
+            <a href="" class="breadcrumbs__link">Мои поездки</a>
+        </div>
+        <div class="heading">мои поездки </div>
+        <form method="get" class="tripChoice__filter">
+            <div class="tripChoice__sort">
+                <div class="tripChoice__sort-text">Период</div>
+                <select class="select1" name="Period" id="period" onchange="this.form.submit()">
+                    @foreach 
+                    (
+                        var option in new Dictionary<string, string> 
+                        {
+                            { "past", "Прошедшие" },
+                            { "upcoming", "Предстоящие" }
+                        }
+                    )
+                    {
+                        if (option.Key == Model.Filter.Period)
+                        {
+                            <option selected value="@option.Key">@option.Value</option>
+                        }
+                        else
+                        {
+                            <option value="@option.Key">@option.Value</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="tripChoice__sort">
+                <div class="tripChoice__sort-text">Сортировка</div>
+                <select class="select1" name="OrderByQuery" id="sort" onchange="this.form.submit()">
+                    @foreach 
+                    (
+                        var option in new Dictionary<string, string> 
+                        {
+                            { "DepartureTime.Asc", "По времени отправления (возр.)" },
+                            { "DepartureTime.Desc", "По времени отправления (убыв.)" },
+                            { "ArrivalTime.Asc", "По времени прибытия (возр.)" },
+                            { "ArrivalTime.Desc", "По времени прибытия (убыв.)" },
+                            { "Price.Asc", "По цене (возр.)" },
+                            { "Price.Desc", "По цене (убыв.)" },
+                        }
+                    )
+                    {
+                        if (option.Key == Model.Filter.OrderByQuery)
+                        {
+                            <option selected value="@option.Key">@option.Value</option>
+                        }
+                        else
+                        {
+                            <option value="@option.Key">@option.Value</option>
+                        }
+                    }
+                </select>
+            </div>
+        </form>
+
+        <div class="tripChoice__list">
+            @{
+                foreach (var order in Model.Objects.Items)   
+                {
+                    string depMonthName = cultureInfo.DateTimeFormat.GetMonthName(order.DepartureTime.Value.Month);
+                    string arrMonthName = cultureInfo.DateTimeFormat.GetMonthName(order.ArrivalTime.Value.Month);
+                    <div class="tripChoice__list-item">
+                        <div class="tripChoice__wrapper">
+                            <div class="tripChoice__departure">
+                                <div class="tripChoice__top">
+                                    <div class="tripChoice__date">@(order.DepartureTime.Value.ToString("dd ") + depMonthName.ToLower())</div>
+                                    <div class="tripChoice__time">@order.DepartureTime.Value.TimeOfDay.ToString(@"hh\:mm")</div>
+                                </div>
+                                <div class="tripChoice__place">@order.StartTripRoutePoint.RoutePoint.Title</div>
+                            </div>
+                            <div class="tripChoice__arrival">
+                                <div class="tripChoice__top">
+                                    <div class="tripChoice__date">@(order.ArrivalTime.Value.ToString("dd ") + arrMonthName.ToLower())</div>
+                                    <div class="tripChoice__time">@order.ArrivalTime.Value.TimeOfDay.ToString(@"hh\:mm")</div>
+                                </div>
+                                <div class="tripChoice__place">@order.EndTripRoutePoint.RoutePoint.Title</div>
+                            </div>
+                            <div class="tripChoice__options">
+                                <div class="tripChoice__options-left">
+                                    <div class="tripChoice__price">Цена</div>
+                                    <div class="tripChoice__priceValue">@order.Price ₽</div>
+                                </div>
+                                <div class="tripChoice__options-right">
+                                    <div class="tripChoice__passengers">Пассажиров</div>
+                                    <div class="tripChoice__passengersValue">@(order.ChildrenCount + order.AdultsCount)</div>
+                                </div>
+                            </div>
+                            <div class="tripChoice__confirm tripChoice__confirm">
+                                <div class="tripChoice__btn tripChoice__btn--myTrip">данные автобуса</div>
+                                <div class="tripChoice__enabled tripChoice__enabled--myTrip">Итого: @order.TotalPrice ₽</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
